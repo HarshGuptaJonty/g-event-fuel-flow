@@ -3,7 +3,8 @@ FuelFlow AI: Agentic Logistics Manager 🚀
 Winner/Participant at Build and Blog Marathon 2025
 Accelerating Wholesale Logistics with Agentic AI.
 
-(Add a GIF of your AI agent handling a complex transaction here)
+![Asking Agent to mkake new entry!](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%202.png)
+![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%203.png)
 
 ## 💡 The Problem
 
