@@ -39,7 +39,6 @@ graph LR
     D -->|Realtime Update| A
 ```
 
-
 Tech Stack
 
 Frontend: Angular 16+, Web Speech API (Optional Voice Input).
@@ -52,39 +51,44 @@ Database: Firebase Realtime Database (NoSQL).
 
 Orchestration: Custom Tool Definitions & Function Calling.
 
-✨ Key Features
+## ✨ Key Features
 
 1. ⚡ Rapid Data Entry via Natural Language
 
 Replaces multi-step form wizards with a single prompt. The AI handles the complexity of distinguishing between:
 
-Sales (OUT): "Sent 10 units to Rakesh."
+- Sales (OUT): "Sent 10 units to Rakesh."
 
-Returns (IN): "Received 5 empties from Rakesh."
+- Returns (IN): "Received 5 empties from Rakesh."
 
-Mixed Transactions: "Delivered 10 filled, collected 10 empty."
+- Mixed Transactions: "Delivered 10 filled, collected 10 empty."
 
 2. 🔍 Intelligent Context Search
 
 The AI doesn't just process text; it understands your business entities.
 
-Customer Lookup: It fuzzy-searches "Rakesh" to find the specific userId and shippingAddress.
+- Customer Lookup: It fuzzy-searches "Rakesh" to find the specific userId and shippingAddress.
 
-Staff Assignment: It links the transaction to the correct Delivery Person automatically.
+- Staff Assignment: It links the transaction to the correct Delivery Person automatically.
 
-Product Resolution: It maps "14KG" to the correct inventory SKU.
+- Product Resolution: It maps "14KG" to the correct inventory SKU.
 
 3. 📊 Business Intelligence & Tracking
 
 By standardizing data entry through AI, FuelFlow maintains accurate records for:
 
-Sales Performance: Tracking purchase frequency of specific customers.
+- Sales Performance: Tracking purchase frequency of specific customers.
 
-Asset Management: Knowing exactly how many empty tanks are pending return from each client.
+- Asset Management: Knowing exactly how many empty tanks are pending return from each client.
 
-🛠️ The "Agentic" Workflow
+## 🛠️ The "Agentic" Workflow
 
 We utilized Gemini Function Calling to give the model real-world tools:
+
+| Left-Aligned | Center Aligned | Right Aligned |
+| :----------- |:--------------:| ------------: |
+| Data 1       | Data 2         | Data 3        |
+| More Data    | Centered Text  | Rightmost     |
 
 Tool Name
 
@@ -102,24 +106,26 @@ refresh_memory
 
 Forces the backend to re-fetch and cache the latest customer list from Firebase.
 
-🚀 Installation & Setup
+## 🚀 Installation & Setup
 
 Prerequisites
 
-Node.js & Angular CLI
+- Node.js & Angular CLI
 
-Python 3.11+
+- Python 3.11+
 
-Google Cloud Project with Vertex AI enabled
+- Google Cloud Project with Vertex AI enabled
 
-Firebase Project
+- Firebase Project
 
 1. Frontend (Angular)
 
-cd fuel-flow-web
-npm install
-ng serve
-# Open http://localhost:4200
+```
+    cd fuel-flow-web
+    npm install
+    ng serve
+    # Open http://localhost:4200
+```
 
 
 2. Backend Agent (Cloud Run / Local)
