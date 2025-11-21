@@ -39,17 +39,15 @@ graph LR
     D -->|Realtime Update| A
 ```
 
-Tech Stack
+# Tech Stack
 
-Frontend: Angular 16+, Web Speech API (Optional Voice Input).
-
-Backend "Brain": Python FastAPI, hosted on Google Cloud Run.
-
-AI Model: Google Vertex AI (Gemini 2.5 Flash).
-
-Database: Firebase Realtime Database (NoSQL).
-
-Orchestration: Custom Tool Definitions & Function Calling.
+| Tool Name    | Description |
+| :----------- |:---------------|
+| Frontend | Angular 16+, Web Speech API (Optional Voice Input). |
+| Backend | "Brain": Python FastAPI, hosted on Google Cloud Run. |
+| AI Model | Google Vertex AI (Gemini 2.5 Flash). |
+| Database | Firebase Realtime Database (NoSQL). |
+| Orchestration | Custom Tool Definitions & Function Calling. |
 
 ## ✨ Key Features
 
