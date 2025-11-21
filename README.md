@@ -150,8 +150,6 @@ Realtime Database Update
 User typing a complex transaction
 ![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%204.png)
 
-Nested JSON created instantly
-
 ## 🏆 Impact
 
 - **90% Reduction in time** spent on data entry tasks.
