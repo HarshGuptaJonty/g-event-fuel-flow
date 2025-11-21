@@ -103,7 +103,7 @@ Prerequisites
 
 - Firebase Project
 
-1. Frontend (Angular)
+1. **Frontend (Angular)**
 
 ```
 cd fuel-flow-web
@@ -112,7 +112,7 @@ ng serve
 # Open http://localhost:4200
 ```
 
-2. Backend Agent (Cloud Run / Local)
+2. **Backend Agent (Cloud Run / Python)**
 
 ```
 cd backend-agent
@@ -123,7 +123,7 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8080
 ```
 
 
-3. Deployment
+3. **Deployment**
 
 ```
 # Build & Deploy to Cloud Run
@@ -131,7 +131,7 @@ gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
 gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
 ```
 
-4. Authentication
+4. **Authentication**
 
 ```
 Number: 6291444925
