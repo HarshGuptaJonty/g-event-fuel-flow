@@ -5,7 +5,7 @@ Accelerating Wholesale Logistics with Agentic AI.
 
 (Add a GIF of your AI agent handling a complex transaction here)
 
-💡 The Problem
+## 💡 The Problem
 
 For local LPG wholesalers, managing inventory, sales, and empty tank returns is a logistical nightmare.
 
@@ -15,7 +15,7 @@ Inventory Leaks: Tracking how many empty cylinders are pending return from speci
 
 Time Critical: In a fast-paced distribution center, stopping to navigate 5 different screens to log one transaction slows down operations.
 
-🤖 The Solution
+## 🤖 The Solution
 
 FuelFlow AI is an Intelligent Command Center integrated directly into the FuelFlow ERP. It replaces navigating multiple complex forms with simple natural language prompts.
 
