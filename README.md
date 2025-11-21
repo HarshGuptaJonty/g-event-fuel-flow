@@ -152,7 +152,7 @@ User typing a complex transaction
 
 ## 📸 Demo video
 
-![Demo Video](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Demo%20Video%201.mp4)
+![Demo Video](https://drive.google.com/file/d/1Uqj_UWqkdK4V2byNujlQM-cBVHVguvTn/view?usp=sharing)
 
 In this demo video, I have made entries and asked AI to show me some profiles
 
