@@ -21,7 +21,7 @@ For local LPG wholesalers, managing inventory, sales, and empty tank returns is 
 
 Instead of manually selecting a customer, adding items, checking stock, and assigning a delivery person, a manager can simply type (or say):
 
-    "Logged Entry for Harsh Gupta."
+    "Animesh delivered 10 units of 15KG LPG to Harsh and received 2000 in cash"
 
 The AI understands the business logic, calculates the totals, updates the inventory, and logs the pending returns automatically—reducing a 2-minute task to 5 seconds.
 
@@ -54,7 +54,7 @@ graph LR
 
 Replaces multi-step form wizards with a single prompt. The AI handles the complexity of distinguishing between:
 
-- Sales (OUT): "Sent 10 units to Rakesh."
+- Delivery (OUT): "Sent 10 units to Rakesh."
 
 - Returns (IN): "Received 5 empties from Rakesh."
 
@@ -68,7 +68,7 @@ The AI doesn't just process text; it understands your business entities.
 
 - Staff Assignment: It links the transaction to the correct Delivery Person automatically.
 
-- Product Resolution: It maps "14KG" to the correct inventory SKU.
+- Product Resolution: It maps "15KG LPG" to the correct inventory SKU.
 
 3. 📊 **Business Intelligence & Tracking**
 
@@ -134,6 +134,7 @@ gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent -
 4. **Authentication**
 
 ```
+# Only if you are opening https://g-event-fuel-flow.web.app/auth
 Number: 92345 67890
 OTP: 124578
 ```
@@ -153,6 +154,10 @@ User typing a complex transaction
 ## 📸 Demo video
 
 https://drive.google.com/file/d/1Uqj_UWqkdK4V2byNujlQM-cBVHVguvTn/view?usp=sharing
+
+## 📃 Blog Post
+
+https://medium.com/@harshgupta.code1/transforming-logistics-with-agentic-ai-on-google-cloud-06fd773518a5
 
 In this demo video, I have made entries and asked AI to show me some profiles
 
