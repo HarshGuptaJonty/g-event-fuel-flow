@@ -69,6 +69,7 @@ export class DeliveryPersonComponent implements OnInit, OnDestroy, AfterViewChec
 
       if (this.computedData.deliveryPersonList)
         this.openProfileOnLoad();
+      console.log('Query Params:', params);
     });
 
     this.userId = this.accountService.getUserId();
@@ -142,6 +143,7 @@ export class DeliveryPersonComponent implements OnInit, OnDestroy, AfterViewChec
       this.selectedDeliveryPerson = this.deliveryPersonData?.deliveryPersonList?.[this.deliveryPersonUserId];
       if (this.selectedDeliveryPerson) {
         this.selectedIndex = this.computedData.deliveryPersonList.findIndex((obj: any) => obj?.data?.userId === this.deliveryPersonUserId);
+        this.openSection = 'profile';
       }
     }
   }
