@@ -85,26 +85,14 @@ By standardizing data entry through AI, FuelFlow maintains accurate records for:
 
 We utilized Gemini Function Calling to give the model real-world tools:
 
-| Left-Aligned | Center Aligned | Right Aligned |
-| :----------- |:--------------:| ------------: |
-| Data 1       | Data 2         | Data 3        |
-| More Data    | Centered Text  | Rightmost     |
-
-Tool Name
-
-Description
-
-process_transaction
-
-Logs complex nested transactions. Distinguishes between the Customer (Buyer) and the Delivery Person (Staff).
-
-get_customer_details
-
-Fetches full profile data (Address, Phone, ID) for a specific name.
-
-refresh_memory
-
-Forces the backend to re-fetch and cache the latest customer list from Firebase.
+| Tool Name    | Description |
+| :----------- |:---------------|
+| process_transaction | Logs complex nested transactions. Distinguishes between the Customer (Buyer), the Delivery Person (Staff) and Product. |
+| get_customer_details | Fetches full profile data (Address, Phone, ID) for a specific name. |
+| get_admin_details | Fetches full profile data (Phone, ID) for a specific name. |
+| get_delivery_person_details | Fetches full profile data (Address, Phone, ID) for a specific name. |
+| get_product_details | Fetches full product data (Rate, ID) for a specific name. |
+| refresh_memory | Forces the backend to re-fetch and cache the latest customer list from Firebase. |
 
 ## 🚀 Installation & Setup
 
@@ -127,43 +115,45 @@ Prerequisites
     # Open http://localhost:4200
 ```
 
-
 2. Backend Agent (Cloud Run / Local)
 
-cd backend-agent
-pip install -r requirements.txt
+```
+    cd backend-agent
+    pip install -r requirements.txt
 
-# Run locally
-python -m uvicorn main:app --host 0.0.0.0 --port 8080
+    # Run locally
+    python -m uvicorn main:app --host 0.0.0.0 --port 8080
+```
 
 
 3. Deployment
 
-# Build & Deploy to Cloud Run
-gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
-gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
+```
+    # Build & Deploy to Cloud Run
+    gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
+    gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
+```
 
 
-📸 Screenshots
+## 📸 Screenshots
 
 Natural Language Interface
+![Asking Agent to mkake new entry!](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%202.png)
 
 Realtime Database Update
-
-
-
-
+![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%203.png)
 
 User typing a complex transaction
+![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%204.png)
 
 Nested JSON created instantly
 
-🏆 Impact
+## 🏆 Impact
 
-90% Reduction in time spent on data entry tasks.
+- 90% Reduction in time spent on data entry tasks.
 
-Minimized Human Error: No more clicking the wrong dropdown or selecting the wrong product ID.
+- Minimized Human Error: No more clicking the wrong dropdown or selecting the wrong product ID.
 
-Real-time Asset Tracking: Immediate visibility into where every cylinder is located.
+- Real-time Asset Tracking: Immediate visibility into where every cylinder is located.
 
-Built with ❤️ at the Google Cloud Build & Blog Marathon, Hyderabad.
+- Built with ❤️ at the Google Cloud Build & Blog Marathon, Hyderabad.
