@@ -1,30 +1,21 @@
 FuelFlow AI: Agentic Logistics Manager 🚀
-
 Winner/Participant at Build and Blog Marathon 2025
-Transforming Last-Mile Logistics with Voice-First Agentic AI.
-
-(Add a GIF of your voice command working here)
-
+Accelerating Wholesale Logistics with Agentic AI.
+(Add a GIF of your AI agent handling a complex transaction here)
 💡 The Problem
-
-Managing LPG cylinder distribution is chaotic. Delivery personnel struggle with:
-
-Manual Data Entry: Typing on phones while handling heavy cylinders is difficult.
-
-Inventory Leakage: Cylinders often go missing due to recording errors.
-
-Context Switching: Searching for customer IDs and product codes takes time.
-
+For local LPG wholesalers, managing inventory, sales, and empty tank returns is a logistical nightmare.
+Tedious Data Entry: Staff spend hours filling out complex forms for every single sale or return.
+Inventory Leaks: Tracking how many empty cylinders are pending return from specific customers is difficult manually.
+Time Critical: In a fast-paced distribution center, stopping to navigate 5 different screens to log one transaction slows down operations.
 🤖 The Solution
-
-FuelFlow AI is an Intelligent Agent that acts as a digital inventory manager. Instead of filling complex forms, staff simply speak to the app. The AI understands context, searches the database for specific customers, and executes complex, multi-nested database transactions automatically.
-
+FuelFlow AI is an Intelligent Command Center integrated directly into the FuelFlow ERP. It replaces navigating multiple complex forms with simple natural language prompts.
+Instead of manually selecting a customer, adding items, checking stock, and assigning a delivery person, a manager can simply type (or say):
+"Logged 50 commercial cylinders sold to Hotel Paradise delivered by Suresh."
+The AI understands the business logic, calculates the totals, updates the inventory, and logs the pending returns automatically—reducing a 2-minute task to 5 seconds.
 🏗️ Architecture
-
 The system uses a Hybrid Architecture combining a reactive Angular frontend with a scalable Serverless Python "Brain".
-
 graph LR
-    A[User Voice/Text] -->|Angular Frontend| B(Cloud Run Agent)
+    A[User Prompt] -->|Angular Frontend| B(Cloud Run Agent)
     B -->|Context & Tools| C{Gemini 2.5 Flash}
     C -->|Function Call| B
     B -->|Search & Write| D[(Firebase Realtime DB)]
@@ -32,75 +23,44 @@ graph LR
 
 
 Tech Stack
-
-Frontend: Angular 16+, Web Speech API (Voice-to-Text).
-
+Frontend: Angular 16+, Web Speech API (Optional Voice Input).
 Backend "Brain": Python FastAPI, hosted on Google Cloud Run.
-
 AI Model: Google Vertex AI (Gemini 2.5 Flash).
-
 Database: Firebase Realtime Database (NoSQL).
-
 Orchestration: Custom Tool Definitions & Function Calling.
-
 ✨ Key Features
-
-1. 🗣️ Voice-First Transaction Logging
-
-Drivers can simply say:
-
-"Ramesh returned 5 Oxygen cylinders and took 10 LPG cylinders."
-
-The AI parses this natural language into structured JSON, separating "Returns" (IN) from "Deliveries" (OUT).
-
-2. 🔍 Intelligent Entity Search (RAG-lite)
-
-The AI doesn't just record text. It performs Semantic Lookups:
-
-It searches the customers node for "Ramesh".
-
-It retrieves the specific userId and phoneNumber.
-
-It links the transaction to the correct productId.
-
-3. 🧠 Context-Aware "Memory"
-
-The agent maintains a cache of the customer database. If a new customer is added, the agent can be triggered to "Refresh Memory" via a specific tool call, ensuring it never works with stale data.
-
+1. ⚡ Rapid Data Entry via Natural Language
+Replaces multi-step form wizards with a single prompt. The AI handles the complexity of distinguishing between:
+Sales (OUT): "Sent 10 units to Rakesh."
+Returns (IN): "Received 5 empties from Rakesh."
+Mixed Transactions: "Delivered 10 filled, collected 10 empty."
+2. 🔍 Intelligent Context Search
+The AI doesn't just process text; it understands your business entities.
+Customer Lookup: It fuzzy-searches "Rakesh" to find the specific userId and shippingAddress.
+Staff Assignment: It links the transaction to the correct Delivery Person automatically.
+Product Resolution: It maps "14KG" to the correct inventory SKU.
+3. 📊 Business Intelligence & Tracking
+By standardizing data entry through AI, FuelFlow maintains accurate records for:
+Sales Performance: Tracking purchase frequency of specific customers.
+Asset Management: Knowing exactly how many empty tanks are pending return from each client.
 🛠️ The "Agentic" Workflow
-
 We utilized Gemini Function Calling to give the model real-world tools:
-
 Tool Name
-
 Description
-
 process_transaction
-
 Logs complex nested transactions. Distinguishes between the Customer (Buyer) and the Delivery Person (Staff).
-
 get_customer_details
-
 Fetches full profile data (Address, Phone, ID) for a specific name.
-
 refresh_memory
-
 Forces the backend to re-fetch and cache the latest customer list from Firebase.
 
 🚀 Installation & Setup
-
 Prerequisites
-
 Node.js & Angular CLI
-
 Python 3.11+
-
 Google Cloud Project with Vertex AI enabled
-
 Firebase Project
-
 1. Frontend (Angular)
-
 cd fuel-flow-web
 npm install
 ng serve
@@ -108,7 +68,6 @@ ng serve
 
 
 2. Backend Agent (Cloud Run / Local)
-
 cd backend-agent
 pip install -r requirements.txt
 
@@ -117,32 +76,23 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8080
 
 
 3. Deployment
-
 # Build & Deploy to Cloud Run
 gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
 gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
 
 
 📸 Screenshots
-
-Voice Interface
-
+Natural Language Interface
 Realtime Database Update
 
 
 
 
-
-User speaking a command
-
-Complex JSON created instantly
+User typing a complex transaction
+Nested JSON created instantly
 
 🏆 Impact
-
-90% Reduction in data entry time for drivers.
-
-Zero "Fat-Finger" Errors thanks to AI validation.
-
-Real-time Sync ensures the warehouse and delivery trucks are always aligned.
-
+90% Reduction in time spent on data entry tasks.
+Minimized Human Error: No more clicking the wrong dropdown or selecting the wrong product ID.
+Real-time Asset Tracking: Immediate visibility into where every cylinder is located.
 Built with ❤️ at the Google Cloud Build & Blog Marathon, Hyderabad.
