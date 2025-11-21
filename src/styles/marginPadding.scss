@@ -1,0 +1,277 @@
+@import '../styles/mediaQueries.scss';
+
+@mixin generate-style($number) {
+
+  // styles based on $number
+  .margin-#{$number} {
+    margin: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin: #{$number}px;
+      }
+    }
+  }
+
+  .margin-bottom-#{$number} {
+    margin-bottom: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin-bottom: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin-bottom: #{$number}px;
+      }
+    }
+  }
+
+  .margin-top-#{$number} {
+    margin-top: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin-top: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin-top: #{$number}px;
+      }
+    }
+  }
+
+  .margin-left-#{$number} {
+    margin-left: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin-left: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin-left: #{$number}px;
+      }
+    }
+  }
+
+  .margin-right-#{$number} {
+    margin-right: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin-right: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin-right: #{$number}px;
+      }
+    }
+  }
+
+  .margin-row-#{$number} {
+    margin: 0px #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin: 0px #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin: 0px #{$number}px;
+      }
+    }
+  }
+
+  .margin-column-#{$number} {
+    margin: #{$number}px 0px;
+
+    &-desk {
+      @include screen-tab-desk {
+        margin: #{$number}px 0px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        margin: #{$number}px 0px;
+      }
+    }
+  }
+
+  .padding-#{$number} {
+    padding: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding: #{$number}px;
+      }
+    }
+  }
+
+  .padding-bottom-#{$number} {
+    padding-bottom: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding-bottom: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding-bottom: #{$number}px;
+      }
+    }
+  }
+
+  .padding-top-#{$number} {
+    padding-top: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding-top: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding-top: #{$number}px;
+      }
+    }
+  }
+
+  .padding-left-#{$number} {
+    padding-left: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding-left: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding-left: #{$number}px;
+      }
+    }
+  }
+
+  .padding-right-#{$number} {
+    padding-right: #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding-right: #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding-right: #{$number}px;
+      }
+    }
+  }
+
+  .padding-row-#{$number} {
+    padding: 0px #{$number}px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding: 0px #{$number}px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding: 0px #{$number}px;
+      }
+    }
+  }
+
+  .padding-column-#{$number} {
+    padding: #{$number}px 0px;
+
+    &-desk {
+      @include screen-tab-desk {
+        padding: #{$number}px 0px;
+      }
+    }
+
+    &-mob {
+      @include screen-mob {
+        padding: #{$number}px 0px;
+      }
+    }
+  }
+}
+
+@for $i from 0 to 101 {
+  @if ($i%5==0) {
+    @include generate-style($i);
+  }
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.no-margin {
+  margin: 0px !important;
+}
+
+.no-padding-desk {
+  @include screen-tab-desk {
+    padding: 0px !important;
+  }
+}
+
+.no-margin-desk {
+  @include screen-tab-desk {
+    margin: 0px !important;
+  }
+}
+
+.no-padding-mob {
+  @include screen-mob {
+    padding: 0px !important;
+  }
+}
+
+.no-margin-mob {
+  @include screen-mob {
+    margin: 0px !important;
+  }
+}
+
+.no-padding-row {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.no-padding-column {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}

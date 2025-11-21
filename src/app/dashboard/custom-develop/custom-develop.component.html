@@ -1,0 +1,137 @@
+<div class="custom-develop-container">
+    <div class="mb-4" *ngIf="false">
+        <div class="heading bold-text">Custom Developer Configuration</div>
+        <div class="mt-1">Dear user, this page is only for development purpose, if this is not ment for you, please
+            report this to dev team immediately.</div>
+
+        <div class="mt-2">
+            <button class="custom-btn me-2" mat-flat-button (click)="checkAvailable()">Check Data Available</button>
+            <button class="custom-btn" mat-flat-button (click)="startConverting()" *ngIf="needToConvert.length > 0">
+                Start Converting</button>
+        </div>
+
+        <div class="mt-3 box-div d-flex flex-column gap-2" *ngIf="statArray.length > 0">
+            <div *ngFor="let data of statArray" class="d-flex justify-content-between">
+                <span class="bold-text">{{data.label}}</span>
+                <span>{{data.value}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4" *ngIf="false">
+        <div class="heading bold-text">File Uploading</div>
+
+        <div class="mt-2">
+            <button class="custom-btn" mat-flat-button (click)="fileInput.click()">Choose File</button>
+            <input hidden type="file" (change)="onFileSelected($event)" #fileInput accept=".xlsx, .xls">
+        </div>
+
+        <div class="mt-3 box-div d-flex flex-column gap-2" *ngIf="selectedFile">
+            <div class="d-flex justify-content-between">
+                <span class="bold-text">File Name</span>
+                <span>{{selectedFile.name}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="bold-text">File Size</span>
+                <span>{{ (selectedFile.size / 1024) | number:'1.0-2' }} KB</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="bold-text">Created On</span>
+                <span>{{selectedFile.lastModified | date:'dd MMMM yyyy hh:mm:ss a'}}</span>
+            </div>
+        </div>
+
+        <div class="mt-3 box-div w-100" *ngIf="excelData && excelData.length">
+            <div class="bold-text mb-2">Excel Data Preview</div>
+            <div style="overflow-x:auto;">
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of excelData[0]">{{ header }}</th>
+                            <th>New Entry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of excelData.slice(1)">
+                            <td *ngFor="let cell of row">{{ cell }}</td>
+                            <td><button class="add-btn" mat-flat-button>Add</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4" *ngIf="isStageEnvironment">
+        <div class="heading bold-text">Staging Environment</div>
+        <div class="mt-1">Dear user, we are currenly in staging environment.</div>
+        <div>The following buttons will help you manage the staging database.</div>
+
+        <div class="mt-3">
+            <button class="custom-btn" mat-flat-button (click)="clearStagingDatabase()">Clear Staging Database</button>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="heading bold-text">Efficiency Report</div>
+        <div class="mt-1">Dear user, this section shows the efficiency report for the current session.</div>
+
+        <div class="mt-3 box-div w-100" *ngIf="efficiencyReport.length">
+            <div class="bold-text mb-2">Efficiency Report</div>
+            <div style="overflow-x:auto;">
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th>Page Key</th>
+                            <th class="text-right">Best Time (ms)</th>
+                            <th class="text-right">Worst Time (ms)</th>
+                            <th class="text-right">Last Time (ms)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let report of efficiencyReport">
+                            <td>{{ report.label }}</td>
+                            <td class="font-mono">{{ report.bestTime }}</td>
+                            <td class="font-mono">{{ report.worstTime }}</td>
+                            <td class="font-mono">{{ report.lastTime }} {{report.lastTime > report.bestTime ? '🔴' : '🟢'}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-3 box-div w-100" *ngIf="dataLoadReport.length">
+            <div class="bold-text mb-2">Data Load Report</div>
+            <div style="overflow-x:auto;">
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Path</th>
+                            <th colspan="2" class="text-center">Last Load Size</th>
+                            <th colspan="2" class="text-center">Total Load Size</th>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Bytes</th>
+                            <th class="text-right">KB</th>
+                            <th class="text-right">Bytes</th>
+                            <th class="text-right">KB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let report of dataLoadReport">
+                            <td>{{ report.label }}</td>
+                            <td class="font-mono">{{ report.lastLoadSize | number:'1.0-2' }}</td>
+                            <td class="font-mono">{{ report.lastLoadSize / 1024 | number:'1.0-2' }}</td>
+                            <td class="font-mono">{{ report.totalLoadSize | number:'1.0-2' }}</td>
+                            <td class="font-mono">{{ report.totalLoadSize / 1024 | number:'1.0-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button class="custom-btn" mat-flat-button (click)="showEfficiencyReport()">Refresh Report</button>
+        </div>
+    </div>
+</div>

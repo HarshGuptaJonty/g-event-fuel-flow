@@ -1,0 +1,188 @@
+@import '../../assets/styles/color.scss';
+@import '../../styles/mediaQueries.scss';
+
+.profile-container {
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+
+    .left-banner {
+        height: calc(100vh - 70px);
+        min-width: 325px;
+
+        @include screen-tab-desk {
+            width: 20%;
+            border-right: 1px solid $border-light;
+            padding: 20px 0px 0px 40px;
+        }
+
+        @include screen-mob {
+            width: 100%;
+            padding: 20px 0px 0px 30px;
+        }
+
+        .profile-image {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .next-button {
+            position: absolute;
+            right: 22px;
+            top: 85px;
+        }
+
+        .pt {
+            &-1p {
+                padding-top: 1px;
+            }
+
+            &-2p {
+                padding-top: 1px;
+            }
+        }
+    }
+
+    .invalid-form-control {
+        color: $danger-color;
+        font-size: 12px;
+        margin-top: -9px;
+    }
+
+    .right-section {
+        min-width: 410px;
+        height: calc(100vh - 70px);
+        overflow-y: auto;
+
+        @include screen-tab-desk {
+            width: 80%;
+            padding: 40px 50px 40px 50px;
+        }
+
+        @include screen-mob {
+            width: 100%;
+            padding: 15px 20px 0px 20px;
+        }
+
+        .form-btn {
+            height: 32px;
+            border-radius: 8px;
+            background-color: white;
+            color: #212529;
+            font-family: "Comfortaa", serif;
+            border: 1px solid #212529;
+            transition: background-color 0.25s ease, color 0.25s ease; // Add transition for smooth hover effect
+
+            &:hover {
+                background-color: #F0F1F1;
+                color: #000; // Optional: Change text color on hover
+            }
+        }
+
+        .custom-btn {
+            font-family: "Comfortaa", serif;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .grey-btn {
+            background-color: $border-light;
+            color: $primary-web-dark;
+
+            &:hover {
+                background-color: $border-very-light;
+            }
+
+            &-red:not(:disabled) {
+                @extend .grey-btn;
+
+                &:hover {
+                    background-color: $primary-web-red;
+                    color: white;
+                }
+            }
+        }
+
+        .configuration {
+            @include screen-tab-desk {
+                margin-top: 5px;
+            }
+
+            @include screen-mob {
+                margin-top: 8px;
+                display: block !important;
+                border-top: 1px dashed $border-light;
+                padding-top: 8px;
+            }
+        }
+
+        @include screen-mob {
+            .invalid-form-control {
+                margin-top: 2px;
+                font-size: 14px;
+            }
+        }
+
+        .nav-list-div {
+            gap: 10px;
+
+            .nav-item {
+                min-height: 50px;
+                font-family: "Comfortaa", serif;
+                border-radius: 5px;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+                padding: 5px 8px;
+
+                .child {
+                    min-height: 40px;
+                }
+
+                &:hover {
+                    cursor: move;
+                    background-color: $light-color;
+                }
+            }
+        }
+    }
+}
+
+::ng-deep {
+    .cdk-drag-preview {
+        min-height: 50px;
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        padding: 14px 8px 5px 8px;
+        background-color: $info-color;
+        font-weight: bold;
+
+        .option-list {
+            display: none;
+        }
+    }
+
+    .cdk-drag-placeholder {
+        padding-top: 14px !important;
+        background-color: $info-color;
+        font-weight: bold;
+
+        .option-list {
+            display: none;
+        }
+    }
+
+    .cdk-overlay-pane {
+        top: unset !important;
+        left: unset !important;
+    }
+
+    .cdk-overlay-connected-position-bounding-box {
+        backdrop-filter: blur(5px);
+        top: unset !important;
+        left: unset !important;
+        justify-content: center;
+        align-items: center;
+    }
+}

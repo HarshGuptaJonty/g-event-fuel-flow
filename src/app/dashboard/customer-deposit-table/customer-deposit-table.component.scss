@@ -1,0 +1,8 @@
+@import '../../../assets/styles/color.scss';
+@import '../entry-data-table/entry-data-table.component.scss';
+
+.new-full-entry {
+    .model-box {
+        overflow-y: unset;
+    }
+}

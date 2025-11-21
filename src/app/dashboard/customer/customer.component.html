@@ -1,0 +1,113 @@
+<div class="customer-container d-flex h-100">
+    <div class="list-section" [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'"
+        *ngIf="!devices.isMobileView || (!addNewCustomer && !selectedCustomer)">
+        <div class="refresh-section d-flex justify-content-between align-items-center">
+            <div>
+                <div class="line1">{{computedData?.customerList?.length}} {{isSearching? 'Results found':'Customers'}}
+                </div>
+                <div class="line2">Updated <span>{{computedData?.lastUpdatedStr}} </span>
+                    <span class="refresh" (click)="refreshCustomerData(true)" tabindex="0"
+                        title="Refresh customer list">refresh</span>.
+                </div>
+            </div>
+            <div class="add-customer d-flex justify-content-center align-items-center" (click)="onAddNewCustomer()"
+                tabindex="0">
+                <span *ngIf="!addNewCustomer" title="Add Customer">+</span>
+                <span *ngIf="addNewCustomer" title="Cancel">x</span>
+            </div>
+        </div>
+
+        <div *ngIf="computedData.customerList?.length > 0" class="customer-list">
+            <app-user-card *ngFor="let obj of computedData.customerList; let i = index" [userObject]="obj"
+                [selected]="selectedIndex === i" (click)="customerSelected(obj,i)">
+            </app-user-card>
+        </div>
+
+        <div *ngIf="computedData.customerList?.length === 0"
+            class="customer-list d-flex justify-content-center align-items-center flex-column">
+            <img src="assets/images/banner/no-result.png" alt="">
+            <div *ngIf="isSearching" class="m-4 text-center bold-text">No search results found!</div>
+            <div *ngIf="!isSearching" class="m-4 text-center bold-text">You have no customers.<br>Add new customers!
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="addNewCustomer" class="details-section" [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+        <app-new-account (onCancel)="addNewCustomer=false" userType="customer"
+            [editProfileId]="selectedCustomer?.data?.userId" [isEditingProfile]="isEditingProfile"
+            (onDelete)="onDeleteProfile(selectedCustomer?.data?.userId)">
+        </app-new-account>
+    </div>
+
+    <div *ngIf="selectedCustomer && !addNewCustomer" class="details-section d-flex flex-column"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+
+        <div *ngIf="devices.isMobileView" class="d-flex back-button bold-text align-items-center cursor-pointer"
+            (click)="selectedCustomer = null; showDepositData = false" tabindex="0">
+            <img src="assets/images/icons/back.png" height="18px" alt="back">
+            <span class="ms-2 pt-2px">Customer List</span>
+        </div>
+
+        <app-user-details *ngIf="selectedCustomer" [userObject]="selectedCustomer" [userId]="userId"
+            [isUpdated]="selectedCustomer.data.isUpdated || false" (onProfileEdit)="onProfileEdit()" [isCustomer]="true"
+            (onStatusUpdate)="toggleUpdateStatus($event)" [depositOverview]="depositOverview" [depositPending]="depositPending">
+        </app-user-details>
+
+        <app-entry-data-table *ngIf="!showDepositData" [customerObject]="selectedCustomer"
+            (updateDataSource)="updateDataSource($event)" (updateDueAmount)="updateDueAmount($event)"
+            (showDeposit)="showDepositData = !showDepositData" class="flex-grow-1"></app-entry-data-table>
+
+        <app-customer-deposit-table *ngIf="showDepositData" [customerObject]="selectedCustomer"
+            (updateDataSource)="updateDataSource($event)" (updateDueAmount)="updateDueAmount($event)"
+            (hideDeposit)="showDepositData = !showDepositData" class="flex-grow-1"></app-customer-deposit-table>
+
+        <div class="footer-section d-flex gap-15 flex-wrap" #statArea>
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.sentList?.length>0 && focusedFormName === 'sentList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.sentList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('sentList', 'sentSum')" tabindex="0">
+                    Sent: {{statistics.sentSum}}
+                </span>
+            </div>
+
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.recieveList?.length>0 && focusedFormName === 'recieveList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.recieveList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('recieveList', 'recieveSum')" tabindex="0">
+                    Recieved: {{statistics.recieveSum}}
+                </span>
+            </div>
+
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.pendingList?.length>0 && focusedFormName === 'pendingList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.pendingList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('pendingList', 'pending')" tabindex="0">
+                    Pending: {{statistics.pending}}
+                </span>
+            </div>
+
+            <span>Due {{devices.isMobileView ? 'Amt' : 'Amount'}}: {{dueAmount | number: '1.2-2'}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="!selectedCustomer && !addNewCustomer && !devices.isMobileView"
+        class="details-section desktop d-flex justify-content-center align-items-center flex-column">
+        <img src="assets/images/banner/no-result.png" alt="">
+        <div class="m-4 text-center bold-text">Selected a customer from the list to view its contents!</div>
+    </div>
+</div>

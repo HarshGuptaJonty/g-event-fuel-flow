@@ -1,0 +1,75 @@
+<div class="new-user-container">
+    <div class="heading bold-text nowrap">{{isEditingProfile?'Update':'Add New'}}
+        {{isCustomerType?'Customer profile':'Delivery person'}}</div>
+    <div class="nowrap">Please provide the following account details.</div>
+    <div class="mt-1 small-text secondary-color">{{isCustomerType? 'Customer':'Delivery person'}} ID: {{accountId}}
+    </div>
+
+    <form [formGroup]="accountForm" class="user-form">
+        <div class="mt-3 pt-2">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Name</mat-label>
+                <input matInput #nameInput placeholder="Harsh Gupta" autocomplete="off" formControlName="fullName"
+                    (blur)="capitalizeWords('fullName')">
+                <mat-hint class="error-msg"
+                    *ngIf="accountForm.get('fullName')?.touched && accountForm.get('fullName')?.invalid">
+                    Please enter a valid name.</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="mt-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Contact number</mat-label>
+                <input matInput placeholder="xxxx xxx xxx" prefix="+91 " [maxLength]="16" autocomplete="off"
+                    mask="00000 00000" formControlName="phoneNumber">
+                <mat-hint class="error-msg"
+                    *ngIf="accountForm.get('phoneNumber')?.touched && accountForm.get('phoneNumber')?.invalid">{{getErrorMessage('phoneNumber')}}</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="mt-3" [ngClass]="{'adjust-margin': userType === 'customer'}">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{isCustomerType?'Customer':'Delivery Person'}} Address.</mat-label>
+                <textarea (blur)="capitalizeWords('address')" matInput placeholder="ABC Lane, XYZ Road 132002"
+                    autocomplete="off" formControlName="address" class="limit-textarea-1"></textarea>
+            </mat-form-field>
+            <div class="d-flex justify-content-end mt-2">
+                <button mat-flat-button *ngIf="userType === 'customer' && accountForm.get('address')?.value?.length > 0"
+                    class="custom-btn" (click)="useCustomerAddressAsShipping()">
+                    Use Customer Address as Shipping Address
+                </button>
+            </div>
+        </div>
+        <div *ngIf="userType === 'customer'">
+            <div class="mt-3 w-100 d-flex" *ngFor="let item of [].constructor(shippingAddressCount); let i = index">
+                <mat-form-field appearance="outline" class="flex-grow-1">
+                    <mat-label>Shipping Address.<span *ngIf="shippingAddressCount>1"> ({{i+1}})</span></mat-label>
+                    <textarea matInput placeholder="ABC Lane, XYZ Road 132002" autocomplete="off"
+                        [formControlName]="'shippingAddress'+(i+1)" class="limit-textarea-1"
+                        (blur)="capitalizeWords('shippingAddress'+(i+1))"></textarea>
+                </mat-form-field>
+                <button class="remove-address-btn ms-2" *ngIf="shippingAddressCount>1" mat-flat-button
+                    (click)="removeThisAddress(i)">X</button>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="custom-btn mt-2" [ngClass]="{'w-100' :devices.isMobileView}" mat-flat-button
+                    (click)="addMoreShippingAddress()" [disabled]="shippingAddressCount >= 10">Add More Address</button>
+            </div>
+        </div>
+        <div class="mt-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Extra details</mat-label>
+                <textarea matInput placeholder="Have Good behaviour..." autocomplete="off" formControlName="extraNote"
+                    class="limit-textarea-2"></textarea>
+            </mat-form-field>
+        </div>
+    </form>
+    <div class="mt-3 justify-content-between d-flex button-section">
+        <button mat-flat-button (click)="saveAccountData()" class="custom-btn"
+            [disabled]="disableSave || accountForm.invalid">Save</button>
+        <div>
+            <button class="cancel-btn custom-btn me-2" mat-flat-button (click)="deleteClicked()"
+                [disabled]="disableSave" *ngIf="isEditingProfile">Delete</button>
+            <button class="cancel-btn custom-btn" mat-flat-button (click)="cancelClicked()"
+                [disabled]="disableSave">Cancel</button>
+        </div>
+    </div>
+</div>

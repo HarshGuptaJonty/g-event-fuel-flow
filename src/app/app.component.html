@@ -1,0 +1,12 @@
+<div class="app-container" *ngIf="isDeveloperMode || isStageMode || isLocalDatabase" (click)="openCustomDevelop()" tabindex="0">
+    <span *ngIf="isStageMode">Stage Mode</span>
+    <span *ngIf="isDeveloperMode && !isStageMode">Developer Mode</span>
+    <span *ngIf="isLocalDatabase">Local Database</span>
+</div>
+<app-entry-detail></app-entry-detail>
+<app-ai-widget *ngIf="aiWidgetService.isWidgetVisible"></app-ai-widget>
+<app-confirmation-model></app-confirmation-model>
+<app-export-model></app-export-model>
+<app-notification></app-notification>
+<app-loader></app-loader>
+<router-outlet></router-outlet>

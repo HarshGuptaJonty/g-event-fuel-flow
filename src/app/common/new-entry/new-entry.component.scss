@@ -1,0 +1,123 @@
+@import '../../../assets/styles/color.scss';
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__trailing,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__notch {
+    border-color: $primary-web-green !important;
+}
+
+.new-entry-container {
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .set-font {
+        font-family: "Comfortaa", serif;
+    }
+
+    .height-fit-content {
+        height: fit-content;
+    }
+
+    .action-section {
+        max-width: 25px;
+        transition: max-width 0.5s ease;
+        overflow: hidden;
+
+        &:hover {
+            cursor: pointer;
+            max-width: 200px;
+        }
+    }
+
+    .parent-of-three {
+        .part {
+            flex: 1;
+        }
+
+        .child {
+            border-radius: 10px;
+            padding: 10px 15px 15px 15px;
+            background-color: #f5f5f5;
+            border: 1px solid #d3d4d7;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+            height: fit-content;
+        }
+
+        .invalid-form {
+            border: 2px solid red;
+            box-shadow: 0px 0px 4px rgba(255, 0, 0, 1) !important;
+        }
+
+        .valid-form {
+            border: 2px solid green;
+            box-shadow: 0px 0px 4px rgba(0, 128, 0, 1) !important;
+        }
+
+        .first-child {
+            max-width: 400px;
+        }
+
+        .product-list {
+            font-family: "Comfortaa", serif;
+
+            .product-label {
+                width: 66px;
+            }
+
+            .product-input {
+                width: 100px;
+                border: none;
+                outline: none;
+                padding: 3px 10px;
+                border-radius: 5px;
+                background-color: #E3E3E4;
+
+                &:disabled:hover {
+                    cursor: not-allowed;
+                }
+            }
+
+            .product-input-2 {
+                @extend .product-input;
+
+                width: 50px;
+            }
+        }
+
+        .product-row {
+            width: 10ch;
+        }
+    }
+
+    input[type=number] {
+
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+
+    ::ng-deep .mdc-line-ripple {
+        display: none;
+    }
+
+    ::ng-deep .mdc-text-field--filled .mdc-floating-label {
+        font-family: "Comfortaa", serif;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+        border-radius: 5px;
+        background-color: #e3e3e4;
+    }
+}

@@ -1,0 +1,176 @@
+<div class="statistics-container d-flex flex-wrap">
+    <div class="d-flex flex-column column-div" *ngIf="customerData.length > 0 || productData.length > 0">
+        <div class="stat-card" *ngIf="customerData.length > 0">
+            <div class="card-name">Customer Insights</div>
+            <div class="card-data-section mt-2">
+                <div *ngFor="let data of customerData">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card" *ngIf="productData.length > 0">
+            <div class="card-name">Product Insights</div>
+            <div class="card-data-2 mt-2">
+                <div class="bold-text ml-18px">Sales</div>
+                <ag-charts class="d-block" [options]="productInsights"></ag-charts>
+            </div>
+            <div class="card-data-section-2">
+                <div *ngFor="let data of productData; let i = index" class="{{data.customClass}}">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card" *ngIf="productData.length > 0">
+            <div class="card-name">Deposit Insights</div>
+            <div class="card-data-2 mt-2">
+                <div class="bold-text ml-18px">Products</div>
+                <ag-charts class="d-block" [options]="depositInsights"></ag-charts>
+            </div>
+            <div class="card-data-section-2 three-rows">
+                <div *ngFor="let data of depositData; let i = index" class="{{data.customClass}}">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column column-div" *ngIf="transactionData.length > 0 || deliveryData.length > 0">
+        <div class="stat-card" *ngIf="transactionData.length > 0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="card-name noWrap">Transaction Insights</div>
+                <div class="d-flex align-items-center gap-2">
+                    <select class="form-select form-select-sm select-list" [(ngModel)]="frequencyFilter.level1.selected"
+                        (change)="onFrequencyChange()">
+                        @for (option of frequencyFilter.level1.options; track option) {
+                        <option value="{{option}}">{{ option }}</option>
+                        }
+                    </select>
+                    <div *ngIf="frequencyFilter.level1.selected !== 'Yearly'" class="d-flex align-items-center gap-2">
+                        <span>|</span>
+                        <select class="form-select form-select-sm select-list"
+                            [(ngModel)]="frequencyFilter.year.selected" (change)="onFrequencyChange()">
+                            @for (option of frequencyFilter.year.options; track option) {
+                            <option *ngIf="option>=minDate.year && option<=maxDate.year" value="{{option}}">
+                                {{ option }}</option>
+                            }
+                        </select>
+                        <select *ngIf="frequencyFilter.level1.selected !== 'Monthly'"
+                            class="form-select form-select-sm select-list" [(ngModel)]="frequencyFilter.month.selected"
+                            (change)="onFrequencyChange()">
+                            @for (option of frequencyFilter.month.options; track option) {
+                            <option *ngIf="option.value>=minDate.month && option.value<=maxDate.month"
+                                value="{{option.value}}">{{ option.label }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-data-2 mt-2">
+                <div class="bold-text ml-18px">{{transactionCardHeader}}</div>
+                <ag-charts *ngIf="showTransactionChart" class="d-block" [options]="salesInsights"></ag-charts>
+            </div>
+            <div class="card-data-section-2 three-rows">
+                <div *ngFor="let data of transactionData; let i = index" class="{{data.customClass}}">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card" *ngIf="deliveryData.length > 0">
+            <div class="card-name">Delivery Insights</div>
+            <div class="card-data-2 mt-2">
+                <div class="bold-text ml-18px">Top Delivery Locations</div>
+                <ag-charts class="d-block" [options]="deliveryLocationInsights"></ag-charts>
+            </div>
+            <div class="card-data-section mt-3">
+                <div *ngFor="let data of deliveryData">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card" *ngIf="tagData.length > 0">
+            <div class="card-name">Tags Insights</div>
+            <div class="card-data-2 mt-2">
+                <div class="bold-text ml-18px">Tags Used</div>
+                <ag-charts class="d-block" [options]="tagsUsedInsights"></ag-charts>
+            </div>
+            <div class="card-data-section mt-3">
+                <div *ngFor="let data of tagData">
+                    <ng-container *ngTemplateOutlet="getTemplate(data.dataType); context: { obj:data }"></ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="customerData.length + productData.length + transactionData.length + deliveryData.length === 0"
+        class="details-section d-flex justify-content-center align-items-center flex-column">
+        <img src="assets/images/banner/no-result.png" alt="">
+        <div class="m-4 text-center bold-text">
+            No data to show! Try to
+            <span class="refresh" (click)="refreshData(true)" tabindex="0">refresh</span>.
+        </div>
+    </div>
+
+    <ng-template #cardData let-obj="obj">
+        <div class="card-data {{obj?.customClass}}">
+            <div class="bold-text">{{ obj?.title || '--' }}</div>
+            <div class="d-flex justify-content-between">
+                <div class="data-value">{{ obj?.value || 0 }}</div>
+                <div class="data-value" *ngIf="obj?.percentValue"
+                    [ngClass]="obj.percentValue > 0 ? 'green-color' : 'red-color'">
+                    {{obj.percentValue > 0 ? '+' : ''}}{{ obj.percentValue }}%
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #cardDataWithList let-obj="obj">
+        <div class="card-data h-100">
+            <div class="d-flex justify-content-between">
+                <div class="bold-text">{{obj?.title || '--'}}</div>
+                <div class="link-text d-flex" *ngIf="obj.canExpand" tabindex="0">
+                    <img *ngIf="!obj.isExpanded" src="assets/images/icons/expand.png" alt="Expand" height="24px"
+                        title="Expand" (click)="obj.isExpanded =! obj.isExpanded" tabindex="0">
+                    <img *ngIf="obj.isExpanded" src="assets/images/icons/collapse.png" alt="Collapse" height="24px"
+                        title="Collapse" (click)="obj.isExpanded =! obj.isExpanded" tabindex="0">
+                    <img *ngIf="obj.canExport" [ngClass]="{'ms-2' : !devices.isMobileView}"
+                        src="assets/images/icons/export.png" alt="Export" title="Export" height="24px"
+                        (click)="exportData(obj.title, obj.exportData)" tabindex="0">
+                </div>
+            </div>
+            <div class="data-value" *ngIf="obj?.value">{{obj.value}}</div>
+            <div class="data-list d-flex flex-column gap-2 bold-text"
+                [ngClass]="{'h-100 justify-content-center': !obj?.listData || obj?.listData?.length === 0, 'can-expand-data-list' : obj.canExpand && obj.isExpanded }">
+                <div *ngFor="let list of obj.isExpanded ? obj?.listData : obj?.listData?.slice(0,obj.collapseCount)">
+                    <ng-container *ngTemplateOutlet="cardDataRow; context: { obj: list }"></ng-container>
+                </div>
+                <div class="small-text secondary-color align-self-center no-data"
+                    *ngIf="!obj?.listData || obj?.listData?.length === 0">No data to display</div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #cardDataRow let-obj="obj">
+        <div class="d-flex justify-content-between">
+
+            <span class="noWrap text-truncate me-3" [ngClass]="{'link-text-onhover':obj.link}" tabindex="0"
+                (click)="openLink(obj.link)" *ngIf="!obj.productList">{{obj?.title || ''}}</span>
+
+            <span *ngIf="obj.productList">
+                <app-resuable-tooltip [data]="obj.productList" [hasLink]="!!obj.link"
+                    [placement]="obj.index > 4 ? 'top' : 'bottom'" (openProductLink)="openProductLink($event)"
+                    (openProfileLink)="openLink(obj.link)">
+                    {{obj?.title || ''}}
+                </app-resuable-tooltip>
+            </span>
+
+            <span *ngIf="obj?.value">{{obj.value}}</span>
+            <span *ngIf="obj?.percentValue" [ngClass]="obj.percentValue > 0 ? 'green-color' : 'red-color'">
+                {{obj.percentValue > 0 ? '+' : ''}}{{obj.percentValue}}%
+            </span>
+        </div>
+    </ng-template>
+</div>

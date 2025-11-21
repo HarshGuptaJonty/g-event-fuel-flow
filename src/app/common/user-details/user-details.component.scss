@@ -1,0 +1,117 @@
+@import '../../../assets/styles/color.scss';
+@import '../../../styles/mediaQueries.scss';
+
+.user-details-container {
+    padding: 40px 50px 20px 50px;
+    position: relative;
+    min-height: 125px;
+
+    .user-name {
+        @include screen-tab-desk {
+            width: calc(100% - 200px);
+        }
+
+        @include screen-mob {
+            width: calc(100% - 50px);
+        }
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .copy-icon {
+        height: 18px;
+        width: 18px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .label-span {
+        background-color: $border-light;
+        padding: 3px 10px;
+        border-radius: 5px;
+    }
+
+    .edit-button {
+        position: absolute;
+        top: 75px;
+        right: 50px;
+
+        .custom-btn {
+            font-family: "Comfortaa", serif;
+            border-radius: 5px;
+
+            background-color: #e3e3e4;
+            color: $primary-web-dark;
+
+            &:hover {
+                background-color: $primary-web-green;
+                color: white;
+            }
+        }
+    }
+
+    .edit-icon {
+        position: absolute;
+        top: 22px;
+        right: 30px;
+    }
+
+    .show-more-address:hover {
+        cursor: pointer;
+    }
+
+    .deposit-overview {
+        background-color: $border-very-light;
+        padding: 0px 15px;
+        align-items: center;
+        display: flex;
+        border-radius: 5px;
+        height: 40px;
+
+        &:hover {
+            background-color: #e3e3e4;
+            cursor: pointer;
+            color: $primary-mat-color;
+        }
+    }
+
+    .list-view {
+        position: absolute;
+        bottom: 0px;
+        right: 100%;
+        background-color: white;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+        max-height: 600px;
+        overflow-y: auto;
+        border-radius: 5px;
+        min-width: 180px;
+        max-width: 250px;
+        gap: 5px;
+        padding: 7px 10px;
+    }
+
+    @include screen-mob {
+        .created-text {
+            display: none;
+        }
+
+        .label-span {
+            display: none;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        padding: 20px 25px 20px 25px;
+        min-height: 100px;
+
+        .edit-button {
+            top: 50px;
+            right: 25px;
+        }
+    }
+}

@@ -1,0 +1,149 @@
+@import '../../../assets/styles/color.scss';
+
+.bulk-entry-container {
+    user-select: none;
+    padding: 20px 40px;
+    font-family: "Comfortaa", serif;
+    height: calc(100vh - 70px);
+    overflow: auto;
+
+    .custom-btn {
+        min-width: 150px;
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+
+        &.red {
+            background-color: $danger-color;
+            color: white;
+
+            &:hover {
+                background-color: $secondary-color;
+            }
+        }
+    }
+
+    .add-btn {
+        min-width: 97px;
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        background-color: $excel-color;
+        color: white;
+
+        &:hover {
+            background-color: $primary-mat-color;
+        }
+    }
+
+    .added-btn {
+        min-width: 70px;
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        background-color: $border-light;
+        color: $primary-web-dark;
+
+        &:hover {
+            background-color: $warning-color;
+        }
+    }
+
+    .box-div {
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 10px 15px;
+        background-color: #F6F6FA;
+    }
+
+    .sheet-section {
+        .tab-div {
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sheet-name {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            padding: 9px 15px 6px 15px;
+            background-color: #F6F6FA;
+            color: $secondary-color;
+            border-bottom: 1px solid $tab-border-color;
+            height: 100%;
+            text-wrap: nowrap;
+
+            &.active {
+                padding: 9px 15px 6px 15px;
+                color: black;
+                font-weight: bold;
+                border-top: 1px solid $tab-border-color;
+                border-left: 1px solid $tab-border-color;
+                border-right: 1px solid $tab-border-color;
+                border-bottom: 1px solid #F6F6FA;
+                z-index: 1;
+            }
+
+            &:not(.active):hover {
+                cursor: pointer;
+                background-color: #EDEDED;
+            }
+        }
+
+        .file-name {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            padding: 9px 15px 6px 15px;
+            background-color: #F6F6FA;
+            color: black;
+            font-weight: bold;
+            align-self: flex-end;
+            height: fit-content;
+            border-top: 1px solid $tab-border-color;
+            border-left: 1px solid $tab-border-color;
+            border-right: 1px solid $tab-border-color;
+            text-wrap: nowrap;
+        }
+    }
+
+    .sheet-data {
+        margin-top: -1px;
+        border: 1px solid $tab-border-color;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 10px 15px;
+        background-color: #F6F6FA;
+
+        .address-width {
+            max-width: 200px;
+        }
+    }
+}
+
+.new-full-entry {
+    z-index: 2;
+    font-family: "Comfortaa", serif;
+
+    width: 100vw;
+    height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+
+    .model-box {
+        margin-left: 20px;
+        margin-right: 20px;
+        max-height: 95%;
+        overflow-y: auto;
+
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px 25px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+        @media (max-width: 800px) {
+            min-width: calc(100vw - 60px);
+        }
+    }
+}

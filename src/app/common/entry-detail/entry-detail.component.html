@@ -1,0 +1,119 @@
+<div class="entry-detail-container" *ngIf="entryDetailModelService.entryData$ | async as formatData">
+    <div class="model-box">
+        <div class="justify-content-between d-flex">
+            <span class="heading bold-text nowrap me-2">Transaction details</span>
+            <button mat-flat-button class="custom-btn" (click)="onClose()">Close</button>
+        </div>
+        <div class="secondary-color">Transaction ID: {{formatData.transactionId}}</div>
+        <div class="d-flex flex-column" [ngClass]="{ 'gap' : dataSource.data && dataSource.data.length>0}">
+            <div class="details-section mt-3 pt-2">
+                <div class="d-flex row-card">
+                    <div class="label">Customer Name</div>
+                    <div class="data">{{formatData.cName}}</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.cNumber">
+                    <div class="label">Customer Number</div>
+                    <div class="data">+91 {{formatData.cNumber}}</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.shippingAddress">
+                    <div class="label">Address</div>
+                    <div class="data">{{formatData.shippingAddress}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Date</div>
+                    <div class="data">{{formatData.date}}</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.totalAmt">
+                    <div class="label">Total Amount</div>
+                    <div class="data">{{formatData.totalAmt | number:'1.2-2'}} Rs</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.paymentAmt">
+                    <div class="label">Payment Receieved</div>
+                    <div class="data">{{formatData.paymentAmt | number:'1.2-2'}} Rs</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.paymentDueAmt">
+                    <div class="label">Payment Due</div>
+                    <div class="data">{{formatData.paymentDueAmt | number:'1.2-2'}} Rs</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Delivery Person</div>
+                    <div class="flex-grow flex-wrap d-flex multiple-box w-100">
+                        <div class="box link-text" *ngFor="let user of formatData.deliveryBoyList"
+                            (click)="openDeliveryBoyProfile(user)" tabindex="0">{{user.fullName}}</div>
+                    </div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.dNumber">
+                    <div class="label">Delivery Boy Number</div>
+                    <div class="data">+91 {{formatData.dNumber}}</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.extraDetails">
+                    <div class="label">Extra details</div>
+                    <div class="data">{{formatData.extraDetails}}</div>
+                </div>
+                <div class="d-flex row-card mt-2" *ngIf="formatData.status">
+                    <div class="label">Status</div>
+                    <div class="data">{{formatData.status}}</div>
+                </div>
+                <div class="d-flex row-card mt-2 top-border pt-2">
+                    <div class="label">Entry made by</div>
+                    <div class="data">{{formatData.createdBy}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Entry Date & Time</div>
+                    <div class="data">{{formatData.createdTime}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Entry last edited by</div>
+                    <div class="data">{{formatData.editedBy}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Last Edit Date & Time</div>
+                    <div class="data">{{formatData.editedTime}}</div>
+                </div>
+                @if (formatData.movedBy) {
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Entry last moved by</div>
+                    <div class="data">{{formatData.movedBy}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Move Date & Time</div>
+                    <div class="data">{{formatData.movedTime}}</div>
+                </div>
+                <div class="d-flex row-card mt-2">
+                    <div class="label">Moves Count</div>
+                    <div class="data link-text" (click)="openMoveHistory(formatData.transactionId)">
+                        {{formatData.moveCount}} Moves (Click to view history)</div>
+                </div>
+                }
+            </div>
+            <div class="table-section">
+                <table *ngIf="dataSource.data && dataSource.data.length>0" mat-table [dataSource]="dataSource"
+                    class="custom-table">
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns()" class="custom-header-row nowrap"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns();" class="custom-row"></tr>
+
+                    <ng-container *ngFor="let column of tableStructure" [matColumnDef]="column.key">
+                        <th mat-header-cell *matHeaderCellDef class="custom-header-cell" [ngClass]="column.customClass">
+                            {{column.label}}</th>
+                        <td mat-cell *matCellDef="let value" class="custom-mat-cell" [ngClass]="column.customClass">
+                            <ng-container
+                                *ngTemplateOutlet="getTemplate(column.dataType); context: {$implicit: value, column: column}"></ng-container>
+                        </td>
+                    </ng-container>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #plainText let-value let-column="column">
+    <span class="nowrap">{{value?.[column.key]}}</span>
+</ng-template>
+
+<ng-template #linkText let-value let-column="column">
+    <span (click)="openProduct(value.productId)" class="nowrap name-text" tabindex="0">{{value?.[column.key]}}</span>
+</ng-template>
+
+<ng-template #amountText let-value let-column="column">
+    <span class="nowrap">{{value?.[column.key] | number: '1.2-2'}}</span>
+</ng-template>

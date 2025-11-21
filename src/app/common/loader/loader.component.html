@@ -1,0 +1,6 @@
+<div *ngIf="loaderService.isLoading$ | async" class="loader-container">
+    <div class="box d-flex align-items-center flex-column">
+        <div class="spinner"></div>
+        <div class="loading-text mt-2">{{ loaderService.loadingText$ | async }}</div>
+    </div>
+</div>

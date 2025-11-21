@@ -1,0 +1,46 @@
+<div class="dashboard-container flex-column">
+    <div class="top-navbar justify-content-between d-flex">
+        <div class="align-self-center logo-section" (click)="takeMeToDashboard()" tabindex="0">
+            <img src="assets/images/icons/favicon.png" height="40px" alt="Fuel Flow Icon" class="me-2 logo-icon">
+            <img src="assets/images/logo/banner_1.png" height="30px" alt="Fuel Flow Logo" title="Fuel Flow India"
+                [ngClass]="activeNavMenu === 'customers' || activeNavMenu === 'delivery' ? 'logo-text-normal' : 'logo-text-inventory'">
+        </div>
+
+        <div class="d-flex navbar-actions">
+            <input #searchInput class="search-box align-self-center" type="text"
+                [placeholder]="'Search in '+activeNavMenu"
+                *ngIf="(activeNavMenu === 'customers' && hasCustomerData() || activeNavMenu === 'delivery' && hasDeliveryPersonData())"
+                (input)="onSearch($event)">
+
+            <div class="nav-item-bar d-flex justify-content-between me-4">
+                <ng-container *ngFor="let item of menuItemList">
+                    <span *ngIf="item.visibleIn === 'top' && item.visible" class="nav-item"
+                        (click)="item.enable ? navMenuItemClicked(item.key):''" tabindex="0"
+                        [ngClass]="{'disabled': !item.enable, 'active': item.key === activeNavMenu}">{{item.title}}</span>
+                </ng-container>
+            </div>
+
+            <div (click)="showMenuCardInfo =! showMenuCardInfo" #profileIcon class="profie align-self-center"
+                tabindex="0">
+                <img class="profile-image" title="Profile" *ngIf="!profilePicLink && adminProfileData?.male"
+                    src="assets/images/svg/profile_male.svg" alt="Male profile Image">
+                <img class="profile-image" title="Profile" *ngIf="!profilePicLink && !adminProfileData?.male"
+                    src="assets/images/svg/profile_female.svg" alt="Male profile Image">
+                <img class="profile-image" title="Profile" *ngIf="profilePicLink" [src]="profilePicLink"
+                    alt="Male profile Image" (error)="profilePicLink = undefined">
+            </div>
+            <div *ngIf="showMenuCardInfo" class="other-menu-card pb-3">
+                <ng-container *ngFor="let item of menuItemList">
+                    <div class="card-menu-item mt-2" *ngIf="item && item.visibleIn === 'side' && item.visible"
+                        (click)="navMenuItemClicked(item.key)" tabindex="0"
+                        [ngClass]="{'disabled': !item.enable, 'active': item.key === activeNavMenu}">
+                        <span>{{item.title}}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="flex-grow-1">
+        <router-outlet></router-outlet>
+    </div>
+</div>

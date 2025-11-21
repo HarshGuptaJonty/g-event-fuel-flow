@@ -1,0 +1,17 @@
+.app-container {
+    background-color: red;
+    color: white;
+    font-family: "Comfortaa", serif;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 5px 10px;
+    border-top-left-radius: 10px;
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

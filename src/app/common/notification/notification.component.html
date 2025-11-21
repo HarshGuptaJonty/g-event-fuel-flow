@@ -1,0 +1,11 @@
+<div class="notification-container moved-right">
+    <div class="notification-card mb-2" *ngFor="let notification of notificationService.notification$ | async"
+        [ngStyle]="{'background-color':notification?.backgroundColor,'color':notification?.textColor,'border-left-color':notification?.leftBarColor}">
+        <div class="bold-text">
+            {{notification?.heading}}
+        </div>
+        <div class="message small-text" *ngIf="notification?.message">
+            {{notification?.message}}
+        </div>
+    </div>
+</div>

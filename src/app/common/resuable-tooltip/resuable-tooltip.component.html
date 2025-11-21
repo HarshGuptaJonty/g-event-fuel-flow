@@ -1,0 +1,15 @@
+<span (click)="toggleTooltip($event)" class="tooltip-container" tabindex="0">
+    <span class="link-text-onhover">
+        <ng-content></ng-content>
+    </span>
+    <div class="tooltip-box {{placement}}" *ngIf="showTooltip">
+        <span *ngFor="let item of data" class="data">
+            <span class="link-text-onhover" (click)="openProductLink.emit(item.id)" tabindex="0">{{item.name}}</span>
+            <span>{{item.value}}</span>
+        </span>
+        <span class="link-text-onhover data justify-content-start align-items-center"
+            (click)="openProfileLink.emit('open')" *ngIf="hasLink" tabindex="0">
+            Open Profile <img src="assets/images/svg/open_link.svg" height="16px" alt="open profile" class="ms-2">
+        </span>
+    </div>
+</span>

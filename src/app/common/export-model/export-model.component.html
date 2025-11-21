@@ -1,0 +1,49 @@
+<div class="export-model-container" *ngIf="exportModelService.exportModelData$ | async as exportModel">
+    <div class="model-box">
+        <div class="heading bold-text">Export Transactions</div>
+        <div>Dear admim, please select the export settings to get the best results.</div>
+        <form class="mt-3" [formGroup]="exportModelForm" (ngSubmit)="onExport()">
+
+            <div class="justify-content-between d-flex align-items-center flex-wrap">
+                <span>File type</span>
+                <mat-button-toggle-group formControlName="exportType" name="fontStyle" aria-label="Font Style"
+                    class="toggle-btn-br">
+                    <mat-button-toggle value="excel">Excel File</mat-button-toggle>
+                    <mat-button-toggle value="pdf">PDF File</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <div class="justify-content-between d-flex align-items-center flex-wrap mt-2">
+                <span>Size of data</span>
+                <mat-button-toggle-group formControlName="dataSize" name="fontStyle" aria-label="Font Style"
+                    class="toggle-btn-br">
+                    <mat-button-toggle value="allPage">All Pages</mat-button-toggle>
+                    <mat-button-toggle value="thisPage">Only This Page</mat-button-toggle>
+                    <mat-button-toggle value="onlySelected" *ngIf="exportModel.hasSelectedRows">Only Selected
+                        Rows</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <div class="justify-content-end d-flex mt-1 align-items-center">
+                <mat-chip-listbox formControlName="chipsArray" multiple>
+                    <mat-chip-option value="newSheet"
+                        *ngIf="!exportModel.hasSelectedCustomer && exportModelForm.get('exportType')?.value === 'excel' ">
+                        New sheet per customer
+                    </mat-chip-option>
+                    <mat-chip-option value="newAddress"
+                        *ngIf="exportModel.hasSelectedCustomer && exportModelForm.get('exportType')?.value === 'excel' ">
+                        New sheet per address
+                    </mat-chip-option>
+                    <mat-chip-option value="totalRow">Show total row</mat-chip-option>
+                </mat-chip-listbox>
+            </div>
+
+            <div class="justify-content-between d-flex mt-2">
+                <button mat-flat-button class="custom-btn grey-btn-red" (click)="exportModelService.hideModel()"
+                    type="button">Cancel</button>
+                <button mat-flat-button class="custom-btn" [disabled]="exportModelForm.invalid"
+                    type="submit">Export</button>
+            </div>
+        </form>
+    </div>
+</div>

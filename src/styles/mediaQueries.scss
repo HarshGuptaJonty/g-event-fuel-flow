@@ -1,0 +1,103 @@
+$screen-xss-portrait: 399px;
+$screen-max-portrait: 480px;
+$screen-sm-max: 900px;
+$screen-lg-min: 1220px;
+
+$screen-md-min: 901px;
+$screen-md-max: 1199px;
+$screen-tab-intermediate-min: 767px;
+$screen-tab-intermediate-max: 899px;
+$screen-tab-min: 900px;
+$screen-tab-max: 1199px;
+$screen-ipad-max: 1366px;
+$screen-surface-pro-max: 930px;
+
+// Override Bootstrap’s default breakpoints
+$grid-breakpoints: (
+    xs: 0,
+    // Custom xs
+    sm: 576px,
+    // Default Bootstrap value
+    md: 901px,
+    // Custom md, adjusted from 768px
+    lg: 992px,
+    // Default Bootstrap value
+    xl: 1230px // Default Bootstrap value
+);
+
+// Optionally adjust container max widths to match new breakpoints
+$container-max-widths: (
+    xs: 100%,
+    // Full width for xs
+    sm: 540px,
+    // Default Bootstrap value
+    md: 900px,
+    // Custom, matches new `md` breakpoint
+    lg: 960px,
+    // Default Bootstrap value
+    xl: 1140px // Default Bootstrap value
+);
+
+
+
+// //mobile screen portrait extra small device width 280px - 399px specially for Samsung devices
+// @mixin screen-mob-xss-portrait{
+//     @media (max-width: 399px) { 
+//         @content
+//     }
+// };
+
+// //mobile screen portrait max 480 with
+// @mixin screen-mob-max-portrait {
+//     @media (max-width: 480px) {
+//          @content
+//     }
+// };
+
+@mixin screen-mob {
+    @media (max-width:$screen-sm-max) {
+        @content
+    }
+}
+
+;
+
+@mixin screen-tab-intermediate {
+    @media (min-width: $screen-tab-intermediate-min) and (max-width: $screen-tab-intermediate-max) {
+        @content
+    }
+}
+
+;
+
+@mixin screen-tab {
+    @media (min-width: $screen-tab-min) and (max-width: $screen-tab-max) {
+        @content
+    }
+}
+
+;
+
+@mixin screen-tab-desk {
+    @media screen and (min-width: $screen-md-min) {
+        @content
+    }
+}
+
+;
+
+@mixin screen-desk {
+    @media (min-width: $screen-lg-min) {
+        @content
+    }
+}
+
+;
+
+@mixin screen-ipad {
+    @media (min-width: $screen-tab-intermediate-min) and (max-width: $screen-ipad-max) {
+        @content
+    }
+}
+
+;

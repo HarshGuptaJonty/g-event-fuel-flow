@@ -1,0 +1,310 @@
+@import '../../assets/styles/color.scss';
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__trailing,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__notch {
+    border-color: $primary-web-green !important;
+}
+
+.authentication-container {
+    font-family: "Comfortaa", serif;
+    overflow: hidden;
+
+    .left-section {
+        width: 35%;
+        padding-top: 40px;
+        padding-left: 60px;
+        padding-right: 60px;
+
+        .fire-icon {
+            margin-left: -10px;
+            height: 40px;
+        }
+
+        .logo-text {
+            height: 40px;
+        }
+
+        .action-section {
+            margin-top: -50px;
+            justify-content: center;
+        }
+
+        .header-text {
+            font-size: 42px;
+            color: $primary-web-dark;
+            font-weight: bold;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-input {
+            min-height: 45px;
+            padding: 5px 15px 0px 15px;
+            border-radius: 10px;
+            border-width: 1px;
+            letter-spacing: 1px;
+        }
+
+        .mt-30px {
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            font-family: "Comfortaa", serif;
+            border-radius: 5px;
+
+            &-half {
+                font-family: "Comfortaa", serif;
+                border-radius: 5px;
+                width: 47%;
+            }
+
+            &-right-margin {
+                margin-right: 6%;
+            }
+        }
+
+        .action-btn:not(:disabled) {
+            @extend .dark-green-btn-color;
+        }
+
+        .secondary-btn-color {
+            background-color: #e3e3e4;
+            color: $primary-web-dark;
+        }
+
+        .dark-green-btn-color {
+            background-color: $primary-web-green;
+            color: white;
+        }
+
+        .error-msg {
+            font-size: 12px;
+            margin-left: 0px;
+            color: $primary-web-red;
+        }
+
+        .otp-sent-msg {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .change-number {
+            font-weight: bold;
+            color: $primary-web-green;
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+
+        .disabled-link {
+            font-weight: bold;
+            color: $secondary-color-2;
+        }
+
+        .footer-image {
+            display: none;
+        }
+    }
+
+    .right-section {
+        background-color: #fcfafe;
+        width: 65%;
+
+        .welcome-msg1 {
+            font-size: 28px;
+            color: $primary-web-dark;
+        }
+
+        .welcome-msg2 {
+            font-size: 62px;
+            color: $primary-web-dark;
+            font-weight: bold;
+        }
+
+        .image-section {
+            width: 50%;
+        }
+    }
+
+    .footer-image {
+        position: absolute;
+        bottom: 0px;
+    }
+
+    .version {
+        user-select: none;
+        position: absolute;
+        left: 30px;
+        bottom: 20px;
+        font-family: "Comfortaa", serif;
+        letter-spacing: 1px;
+
+        &:hover {
+            font-weight: bold;
+        }
+    }
+
+    @media (max-width: 1440px) {
+        .left-section {
+            width: 45%;
+        }
+
+        .right-section {
+            width: 55%;
+
+            .welcome-msg1 {
+                font-size: 24px;
+            }
+
+            .welcome-msg2 {
+                font-size: 58px;
+            }
+
+            .image-section {
+                width: 60%;
+            }
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .right-section {
+            .image-section {
+                width: 65%;
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .left-section {
+            width: 50%;
+        }
+
+        .right-section {
+            width: 50%;
+
+            .welcome-msg1 {
+                font-size: 22px;
+            }
+
+            .welcome-msg2 {
+                font-size: 50px;
+            }
+        }
+    }
+
+    .mobile-view {
+        padding-top: 30px;
+        background-color: #fcfafe;
+        font-family: "Comfortaa", serif;
+
+        .welcome-page {
+            height: -webkit-fill-available;
+        }
+
+        .logo-text {
+            height: 32px;
+        }
+
+        .image-section {
+            width: 100%;
+            max-width: 489px;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            justify-content: left;
+        }
+
+        .outline-btn {
+            border-radius: 5px;
+            border: 1px solid $primary-web-green;
+            background-color: transparent;
+            color: $primary-web-green;
+        }
+
+        .welcome-msg1 {
+            font-size: 32px;
+            color: $primary-web-dark;
+            font-weight: bolder;
+        }
+
+        .welcome-msg2 {
+            font-size: 26px;
+            color: $primary-web-dark;
+        }
+
+        .button-div {
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+
+            @media screen and (min-width: 570px) {
+                flex-direction: row;
+            }
+        }
+
+        .action-btn.login {
+            position: absolute;
+            bottom: 100px;
+            width: -webkit-fill-available !important;
+            margin-right: 30px;
+        }
+
+        .mob-btn:not(.login) {
+            width: 100%;
+
+            @media screen and (min-width: 570px) {
+                max-width: 280px;
+            }
+        }
+
+        .back-icon {
+            border: 1px solid rgb(202, 202, 202);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .mob-form {
+
+            .mob-input {
+                width: 100%;
+                height: 48px;
+                border-radius: 5px;
+                padding: 0px 15px;
+                border: 1px solid transparent;
+                background-color: #e3e3e4;
+                font-size: 16px;
+                outline: none;
+            }
+
+            .mob-form-field {
+                ::ng-deep .mdc-line-ripple {
+                    display: none
+                }
+
+                ::ng-deep .mdc-text-field--filled .mdc-floating-label {
+                    font-family: "Comfortaa", serif;
+                }
+
+                ::ng-deep .mat-mdc-text-field-wrapper {
+                    border-radius: 7px;
+                    background-color: #e3e3e4;
+                }
+            }
+        }
+    }
+}

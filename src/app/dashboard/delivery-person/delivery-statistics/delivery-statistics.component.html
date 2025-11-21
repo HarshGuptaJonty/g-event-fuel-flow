@@ -1,0 +1,72 @@
+<div class="delivery-statistics-container">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="heading bold-text nowrap">Statistics</div>
+        <div class="d-flex align-items-center gap-2">
+            <select class="form-select form-select-sm select-list" *ngIf="frequencyFilter.product.options.length > 0"
+                [(ngModel)]="frequencyFilter.product.selected" (change)="onFrequencyChange()">
+                @for (option of frequencyFilter.product.options; track option) {
+                <option value="{{option.value}}">{{ option.label }}</option>
+                }
+            </select>
+            <span *ngIf="frequencyFilter.product.options.length > 0">|</span>
+            <select class="form-select form-select-sm select-list" [(ngModel)]="frequencyFilter.level1.selected"
+                (change)="onFrequencyChange()">
+                @for (option of frequencyFilter.level1.options; track option) {
+                <option value="{{option}}">{{ option }}</option>
+                }
+            </select>
+            <div *ngIf="frequencyFilter.level1.selected !== 'All Time'" class="d-flex align-items-center gap-2">
+                <span>|</span>
+                <select class="form-select form-select-sm select-list" [(ngModel)]="frequencyFilter.year.selected"
+                    (change)="onFrequencyChange()">
+                    @for (option of frequencyFilter.year.options; track option) {
+                    <option *ngIf="option>=minDate.year && option<=maxDate.year" value="{{option}}">
+                        {{ option }}</option>
+                    }
+                </select>
+                <select *ngIf="frequencyFilter.level1.selected !== 'Yearly'"
+                    class="form-select form-select-sm select-list" [(ngModel)]="frequencyFilter.month.selected"
+                    (change)="onFrequencyChange()">
+                    @for (option of frequencyFilter.month.options; track option) {
+                    <option *ngIf="option.value>=minDate.month && option.value<=maxDate.month" value="{{option.value}}">
+                        {{ option.label }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-section mt-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="bold-text ml-18px">No. of Deliveries
+                <span *ngIf=" frequencyFilter.level1.selected === 'Daily'"> {{totalDeliveries || 0}}</span>
+            </div>
+            <select class="form-select form-select-sm select-list mb-1"
+                *ngIf="frequencyFilter.level1.selected === 'Daily' && frequencyFilter.deliveryPerson.options.length > 0"
+                [(ngModel)]="frequencyFilter.deliveryPerson.selected" (change)="onFrequencyChange()">
+                @for (option of frequencyFilter.deliveryPerson.options; track option) {
+                <option value="{{option.value}}">{{ option.label }}</option>
+                }
+            </select>
+        </div>
+        <ag-charts *ngIf="showChart" class="d-block" [options]="chartData"></ag-charts>
+    </div>
+
+    <div class="card-section mt-3 d-flex flex-wrap">
+        <div class="name-card d-flex flex-column" *ngFor="let item of displayData">
+            <div class="d-flex flex-column">
+                <div class="card-title bold-text mb-1">{{ item.name }}</div>
+                <div class="card-title">Total Deliveries: {{ item.total }}</div>
+            </div>
+            <div class="more-details border-top pt-2">
+                @for (keyVal of item | keyvalue; track $index) {
+                <div *ngIf="keyVal.key !== 'name' && keyVal.key !== 'total' && keyVal.key !== 'userId'"
+                    class="d-flex justify-content-between">
+                    <div class="card-value bold-text">{{ getProductName(keyVal.key) }}</div>
+                    <div class="card-value">{{ keyVal.value }}</div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

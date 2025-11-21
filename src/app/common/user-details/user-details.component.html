@@ -1,0 +1,60 @@
+<div class="user-details-container">
+    <div class="d-flex align-items-top justify-content-between">
+        <span class="d-flex align-items-center user-name">
+            <span class="large-text bold-text noWrap">{{data.fullName}}</span>
+            <span *ngIf="isCustomer" class="ms-1 cursor-pointer" (click)="toggleUpdateStatus()" tabindex="0">
+                {{isUpdated ? '✅' : '❌'}}
+            </span>
+        </span>
+        <span class="live-since medium-text secondary-color created-text">Created {{computedData.createdOn}}</span>
+    </div>
+    <div class="d-flex align-items-center mt-1" *ngIf="data.phoneNumber">
+        <span class="me-3 label-span small-text">Phone Number</span>
+        <span class="bold-text letter-spacing-1 me-2">{{getNumberInformat(data?.phoneNumber)}}</span>
+        <img src="assets/images/svg/copy.svg" alt="copy" class="copy-icon" title="Copy number"
+            (click)="copyData(data.phoneNumber)" tabindex="0">
+    </div>
+    <div class="d-flex align-items-center mt-1" *ngIf="data.address">
+        <span class="me-3 label-span small-text">Address</span>
+        <span class="bold-text letter-spacing-1 me-2 noWrap">{{data.address}}</span>
+        <img src="assets/images/svg/copy.svg" alt="copy" class="copy-icon" title="Copy address"
+            (click)="copyData(data.address)" tabindex="0">
+    </div>
+    <div class="d-flex align-items-center mt-1" *ngIf="data.shippingAddress && data.shippingAddress[0]">
+        <span *ngIf="data.shippingAddress.length > 1" class="me-3 label-span small-text noWrap show-more-address"
+            (click)="showMoreAddress = !showMoreAddress" tabindex="0">Shipping Address...</span>
+        <span *ngIf="data.shippingAddress.length === 1" class="me-3 label-span small-text noWrap">
+            Shipping Address
+        </span>
+        <span class="bold-text letter-spacing-1 me-2 noWrap">{{data.shippingAddress}}</span>
+        <img src="assets/images/svg/copy.svg" alt="copy" class="copy-icon" title="Copy shipping address"
+            (click)="copyData(data.shippingAddress[0])" tabindex="0">
+    </div>
+    <div *ngIf="showMoreAddress">
+        <div class="d-flex align-items-center mt-2" *ngFor="let address of data.shippingAddress; let i = index">
+            <span class="me-3 label-span small-text noWrap">Shipping Address ({{i+1}})</span>
+            <span class="bold-text letter-spacing-1 me-2 noWrap">{{address}}</span>
+            <img src="assets/images/svg/copy.svg" alt="copy" class="copy-icon" title="Copy shipping address"
+                (click)="copyData(address)" tabindex="0">
+        </div>
+    </div>
+    <div class="d-flex align-items-center mt-1" *ngIf="data.extraNote">
+        <span class="me-3 label-span small-text">Extra Note</span>
+        <span class="bold-text letter-spacing-1 me-2">{{data.extraNote}}</span>
+    </div>
+    <div class="edit-button d-flex hidden-xs">
+        <div class="list-view d-flex flex-column" *ngIf="depositOverview.length>0 && showDepositOverview">
+            <div class="d-flex justify-content-between gap" *ngFor="let obj of depositOverview">
+                <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                <span>{{obj.value}}</span>
+            </div>
+        </div>
+        <div class="deposit-overview me-2" (click)="showDepositOverview = !showDepositOverview">
+            {{depositPending}} Pending
+        </div>
+        <button class="custom-btn" mat-flat-button (click)="editProfile()">Edit Profile</button>
+    </div>
+    <div class="edit-icon cursor-pointer visible-xs" (click)="editProfile()" tabindex="0">
+        <img src="assets/images/icons/edit.png" height="24px" alt="edit">
+    </div>
+</div>

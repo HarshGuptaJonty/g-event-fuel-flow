@@ -1,0 +1,276 @@
+<div class="authentication-container d-flex h-100">
+    <div class="left-section h-100" *ngIf="!devices.isMobileView">
+        <img src="assets/images/icons/favicon.png" alt="Fuel Flow Icon" class="me-2 fire-icon">
+        <img src="assets/images/logo/banner_1.png" alt="Fuel Flow Logo" class="logo-text">
+        <div id="recaptcha-container"></div>
+
+        <div class="action-section d-flex flex-column h-100" *ngIf="isLogin">
+            <span class="header-text">{{devices.isMobileView ? message.WELCOME_BACK : message.LOGIN}}</span>
+            <div class="mt-2">{{message.LOGIN_SUBTEXT}}</div>
+            <form [formGroup]="loginForm">
+                <div class="mt-4 pt-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Registered contact number.</mat-label>
+                        <input matInput placeholder="xxxx xxx xxx" prefix="+91 " [maxLength]="16" autocomplete="off"
+                            mask="00000 00000" formControlName="phoneNumber"
+                            (keydown.enter)="(!disableButtons && loginForm.valid) ? loginBtnClick() : null">
+                        <mat-hint class="error-msg"
+                            *ngIf="loginForm.get('phoneNumber')?.touched && loginForm.get('phoneNumber')?.invalid">{{getErrorMessage('phoneNumber')}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="isOtpSent" class="mt-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>One Time Password (OTP).</mat-label>
+                        <input matInput placeholder="xxxxxx" [maxLength]="6" autocomplete="off" formControlName="otp"
+                            (keydown.enter)="(!disableButtons && loginForm.valid) ? loginBtnClick() : null">
+                        <mat-hint class="error-msg"
+                            *ngIf="loginForm.get('otp')?.touched && loginForm.get('otp')?.invalid">{{getErrorMessage('otp')}}</mat-hint>
+                    </mat-form-field>
+                </div>
+            </form>
+            {{isOtpSent ? loginForm.get('otp')?.enable() : loginForm.get('otp')?.disable()}}
+            <button class="action-btn mt-4" mat-flat-button [disabled]="disableButtons || loginForm.invalid"
+                (click)="loginBtnClick()">{{isOtpSent ? 'Verify OTP' : loginForm.get('phoneNumber')?.value?.length ===
+                10 ? 'Send OTP' : 'Login'}}
+            </button>
+            <div class="otp-sent-msg" *ngIf="!isOtpSent">
+                Dont have an account?<span class="change-number" (click)="createNewAccBtnClick()" tabindex="0">
+                    Create new account.</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg">
+                OTP sent to +91 {{loginForm.get('phoneNumber')?.value}}.
+                <span class="change-number" (click)="updateOtpSentStatus(false)" tabindex="0"> Change Number?</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg mt-2" [ngClass]="{'disabled-link':resendOtpCount > 0}">
+                Didn't receive code? <span [ngClass]="{'change-number':resendOtpCount <= 0}"
+                    (click)="checkCaptchaAndSendOTP()" tabindex="0"> Resend</span><span *ngIf="resendOtpCount>0">
+                    after {{resendOtpCount}}s</span>
+            </div>
+        </div>
+
+        <div class="action-section d-flex flex-column h-100" *ngIf="!isLogin">
+            <span class="header-text">{{message.SIGNUP}}</span>
+            <div class="mt-2">{{message.SIGNUP_SUBTEXT}}</div>
+            <form [formGroup]="signupForm" (keydown.enter)="$event.preventDefault()">
+                <div class="mt-4 pt-2" *ngIf="!isOtpSent">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Full name.</mat-label>
+                        <input matInput placeholder="Harsh Gupta" [maxLength]="30" autocomplete="off"
+                            formControlName="fullName">
+                        <mat-hint class="error-msg"
+                            *ngIf="signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid">Please
+                            enter a valid name.</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="mt-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Contact number.</mat-label>
+                        <input matInput placeholder="xxxx xxx xxx" prefix="+91 " [maxLength]="16" autocomplete="off"
+                            mask="00000 00000" formControlName="phoneNumber">
+                        <mat-hint class="error-msg"
+                            *ngIf="signupForm.get('phoneNumber')?.touched && signupForm.get('phoneNumber')?.invalid">{{getErrorMessage('phoneNumber')}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="mt-3" *ngIf="!isOtpSent">
+                    <div class="d-flex">
+                        <button class="action-btn-half action-btn-right-margin" mat-flat-button
+                            (click)="$event.preventDefault(); isMaleGender=true"
+                            [ngClass]="!isMaleGender ? 'secondary-btn-color' : 'dark-green-btn-color'">Male</button>
+                        <button class="action-btn-half" mat-flat-button (click)="isMaleGender=false"
+                            [ngClass]="isMaleGender ? 'secondary-btn-color' : 'dark-green-btn-color'">Female</button>
+                    </div>
+                </div>
+                <div class="mt-3" *ngIf="!isOtpSent">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Access Key.</mat-label>
+                        <input matInput placeholder="ABCXXXXXXXXXX12" autocomplete="off" formControlName="accessKey"
+                            (keydown.enter)="(!disableButtons && signupForm.valid) ? createNewAccBtnClick() : null">
+                        <mat-hint class="error-msg"
+                            *ngIf="signupForm.get('accessKey')?.touched && signupForm.get('accessKey')?.invalid">{{getErrorMessage('accessKey')}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="isOtpSent" class="mt-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>One Time Password (OTP).</mat-label>
+                        <input matInput placeholder="xxxxxx" [maxLength]="6" autocomplete="off" formControlName="otp"
+                            (keydown.enter)="(!disableButtons && signupForm.valid) ? createNewAccBtnClick() : null">
+                        <mat-hint class="error-msg"
+                            *ngIf="signupForm.get('otp')?.touched && signupForm.get('otp')?.invalid">{{getErrorMessage('otp')}}</mat-hint>
+                    </mat-form-field>
+                </div>
+            </form>
+            <button class="action-btn mt-3" mat-flat-button (click)="createNewAccBtnClick()"
+                [disabled]="disableButtons || signupForm.invalid">
+                {{isOtpSent ? 'Verify OTP': signupForm.get('phoneNumber')?.value.length === 10 ? 'Send OTP' :
+                'Create Account'}}
+            </button>
+            <div class="otp-sent-msg" *ngIf="!isOtpSent">
+                Already have an account?<span class="change-number" (click)="loginBtnClick()" tabindex="0">
+                    Login.</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg">
+                OTP sent to {{signupForm.get('phoneNumber')?.value}}. <span class="change-number"
+                    (click)="updateOtpSentStatus(false)" tabindex="0"> Change Number?</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg mt-2" [ngClass]="{'disabled-link':resendOtpCount > 0}">
+                Didn't receive code? <span [ngClass]="{'change-number':resendOtpCount <= 0}"
+                    (click)="checkCaptchaAndSendOTP()" tabindex="0"> Resend</span><span *ngIf="resendOtpCount>0"> after
+                    {{resendOtpCount}}s</span>
+            </div>
+        </div>
+
+        <div class="footer-image">
+            <img src="assets/images/banner/bottom-bg-img.png" width="100%" alt="Design banners">
+        </div>
+    </div>
+    <div class="right-section h-100" *ngIf="!devices.isMobileView">
+        <div class="align-items-center justify-content-center d-flex flex-column h-100">
+            <div class="welcome-msg1">{{isLogin?'Nice to see you again':'Reliable Gas Supply, Anytime, Anywhere!'}}
+            </div>
+            <div class="welcome-msg2">{{isLogin?'Welcome back':isOtpSent?'Hey, '+getShortName():'Welcome'}}</div>
+            <div class="d-flex justify-content-center mt-2 w-100">
+                <img src="assets/images/banner/fuel-flow-original.png" class="image-section" alt="Design banners">
+            </div>
+            <div class="footer-image">
+                <img src="assets/images/banner/bottom-bg-img.png" width="100%" alt="Design banners">
+            </div>
+        </div>
+    </div>
+    <div class="version secondary-color">
+        <span [title]="localStorage.LAST_UPDATED">v{{localStorage.CURRENT_VERSION}}</span>
+    </div>
+
+    <div class="mobile-view left-section w-100 no-padding-row" *ngIf="devices.isMobileView">
+        <div id="recaptcha-container"></div>
+
+        <div class="d-flex align-items-center padding-left-35" *ngIf="mobCurrentPage === 'welcome'">
+            <img src="assets/images/icons/favicon.png" alt="Fuel Flow Icon" class="me-2 fire-icon">
+            <img src="assets/images/logo/banner_1.png" alt="Fuel Flow Logo" class="logo-text">
+        </div>
+
+        <div class="welcome-page w-100" *ngIf="mobCurrentPage === 'welcome'">
+            <div class="padding-row-30 margin-top-20">
+                <div class="welcome-msg1">Quick</div>
+                <div class="welcome-msg1">onboarding</div>
+                <div class="welcome-msg2">for trusted partners</div>
+            </div>
+
+            <img src="assets/images/banner/fuel-flow-original.png" class="image-section padding-row-20 margin-top-15"
+                alt="Design banners">
+
+            <div class="padding-row-30 margin-top-20 button-div">
+                <button class="action-btn height-48 mob-btn" mat-flat-button
+                    (click)="mobCurrentPage = 'login'; isLogin = true">Login
+                </button>
+
+                <button class="outline-btn height-48 mob-btn" mat-outline-button
+                    (click)="mobCurrentPage = 'signup'; isLogin = false">Register
+                </button>
+            </div>
+        </div>
+
+        <div class="login-page padding-row-30" *ngIf="mobCurrentPage === 'login'">
+
+            <img src="../../assets/images/icons/back.png" height="40px" width="40px" class="back-icon" alt="Back"
+                (click)="mobCurrentPage = 'welcome'" tabindex="0">
+
+            <div class="margin-top-20">
+                <div class="welcome-msg1">Welcome back!</div>
+                <div class="welcome-msg2">Glad to see you, Again!</div>
+            </div>
+
+            <form [formGroup]="loginForm" class="mob-form w-100 margin-top-20">
+                <mat-form-field class="w-100 mob-form-field">
+                    <mat-label>Registered contact number.</mat-label>
+                    <input matInput placeholder="xxxx xxx xxx" prefix="+91 " [maxLength]="16" autocomplete="off"
+                        mask="00000 00000" formControlName="phoneNumber" (keydown.enter)="(!disableButtons && loginForm.valid) ? loginBtnClick() : null">
+                </mat-form-field>
+                <mat-form-field class="w-100 mob-form-field margin-top-15">
+                    <mat-label>One Time Password (OTP).</mat-label>
+                    <input matInput placeholder="xxxxxx" [maxLength]="6" autocomplete="off" formControlName="otp"
+                        (keydown.enter)="(!disableButtons && loginForm.valid) ? loginBtnClick() : null">
+                </mat-form-field>
+            </form>
+
+            {{isOtpSent ? loginForm.get('otp')?.enable() : loginForm.get('otp')?.disable()}}
+
+            <div *ngIf="isOtpSent" class="otp-sent-msg">
+                OTP sent to +91 {{loginForm.get('phoneNumber')?.value}}.
+                <span class="change-number" (click)="updateOtpSentStatus(false)" tabindex="0"> Change Number?</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg mt-2" [ngClass]="{'disabled-link':resendOtpCount > 0}">
+                Didn't receive code? <span [ngClass]="{'change-number':resendOtpCount <= 0}"
+                    (click)="checkCaptchaAndSendOTP()" tabindex="0"> Resend</span><span *ngIf="resendOtpCount>0"> after
+                    {{resendOtpCount}}s</span>
+            </div>
+
+            <button class="action-btn height-48 mob-btn login" mat-flat-button (click)="loginBtnClick()"
+                [disabled]="disableButtons || loginForm.invalid">
+                {{isOtpSent ? 'Verify OTP' : loginForm.get('phoneNumber')?.value?.length === 10 ? 'Send OTP' : 'Login'}}
+            </button>
+        </div>
+
+        <div class="signup-page padding-row-30" *ngIf="mobCurrentPage === 'signup'">
+
+            <img src="../../assets/images/icons/back.png" height="40px" width="40px" class="back-icon" alt="Back"
+                (click)="mobCurrentPage = 'welcome'" tabindex="0">
+
+            <div class="margin-top-20">
+                <div class="welcome-msg1">Hello there!</div>
+                <div class="welcome-msg2">Register to get started!</div>
+            </div>
+
+            <form [formGroup]="signupForm" (keydown.enter)="$event.preventDefault()"
+                class="mob-form w-100 margin-top-20">
+                <mat-form-field class="w-100 mob-form-field margin-bottom-15" *ngIf="!isOtpSent">
+                    <mat-label>Full name.</mat-label>
+                    <input matInput placeholder="Harsh Gupta" [maxLength]="30" autocomplete="off"
+                        formControlName="fullName">
+                </mat-form-field>
+                <mat-form-field class="w-100 mob-form-field">
+                    <mat-label>Contact number.</mat-label>
+                    <input matInput placeholder="xxxx xxx xxx" prefix="+91 " [maxLength]="16" autocomplete="off"
+                        mask="00000 00000" formControlName="phoneNumber">
+                </mat-form-field>
+                <div class="mt-3" *ngIf="!isOtpSent">
+                    <div class="d-flex">
+                        <button class="action-btn-half action-btn-right-margin" mat-flat-button
+                            (click)="$event.preventDefault(); isMaleGender=true"
+                            [ngClass]="!isMaleGender ? 'secondary-btn-color' : 'dark-green-btn-color'">Male</button>
+                        <button class="action-btn-half" mat-flat-button (click)="isMaleGender=false"
+                            [ngClass]="isMaleGender ? 'secondary-btn-color' : 'dark-green-btn-color'">Female</button>
+                    </div>
+                </div>
+                <mat-form-field class="w-100 mob-form-field margin-top-15" *ngIf="!isOtpSent">
+                    <mat-label>Access Key.</mat-label>
+                    <input matInput placeholder="ABCXXXXXXXXXX12" autocomplete="off" formControlName="accessKey"
+                        (keydown.enter)="(!disableButtons && signupForm.valid) ? createNewAccBtnClick() : null">
+                </mat-form-field>
+                <mat-form-field class="w-100 mob-form-field margin-top-15" *ngIf="isOtpSent">
+                    <mat-label>One Time Password (OTP).</mat-label>
+                    <input matInput placeholder="xxxxxx" [maxLength]="6" autocomplete="off" formControlName="otp"
+                        (keydown.enter)="(!disableButtons && signupForm.valid) ? createNewAccBtnClick() : null">
+                    <mat-hint class="error-msg"
+                        *ngIf="signupForm.get('otp')?.touched && signupForm.get('otp')?.invalid">{{getErrorMessage('otp')}}</mat-hint>
+                </mat-form-field>
+            </form>
+
+            <div *ngIf="isOtpSent" class="otp-sent-msg">
+                OTP sent to +91 {{loginForm.get('phoneNumber')?.value}}.
+                <span class="change-number" (click)="updateOtpSentStatus(false)" tabindex="0"> Change Number?</span>
+            </div>
+            <div *ngIf="isOtpSent" class="otp-sent-msg mt-2" [ngClass]="{'disabled-link':resendOtpCount > 0}">
+                Didn't receive code? <span [ngClass]="{'change-number':resendOtpCount <= 0}"
+                    (click)="checkCaptchaAndSendOTP()" tabindex="0"> Resend</span><span *ngIf="resendOtpCount>0"> after
+                    {{resendOtpCount}}s</span>
+            </div>
+
+            <button class="action-btn height-48 mob-btn login" mat-flat-button
+                (click)="isOtpSent = !isOtpSent; createNewAccBtnClick()"
+                [disabled]="disableButtons || signupForm.invalid">
+                {{isOtpSent ? 'Verify OTP': signupForm.get('phoneNumber')?.value.length === 10 ? 'Send OTP' :
+                'Register'}}
+            </button>
+        </div>
+    </div>
+</div>

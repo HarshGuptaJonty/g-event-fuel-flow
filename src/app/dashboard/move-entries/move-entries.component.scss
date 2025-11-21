@@ -1,0 +1,75 @@
+@import '../../../assets/styles/color.scss';
+
+.move-entries-container {
+    user-select: none;
+    padding: 20px 40px;
+    font-family: "Comfortaa", serif;
+    height: calc(100vh - 70px);
+    overflow: auto;
+
+    @media (max-width: 760px) {
+        padding: 20px 30px;
+    }
+
+    .input-section {
+        gap: 15px;
+
+        .min-input-width {
+            min-width: 300px;
+
+            @media (max-width: 760px) {
+                min-width: 200px;
+            }
+
+            @media (max-width: 573px) {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+
+        .arrow {
+            @media (max-width: 573px) {
+                display: none;
+            }
+        }
+    }
+
+    .filter-box {
+        padding: 7px 10px 4px 10px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .accordian-box {
+        padding: 7px 8px 15px 8px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+
+        @media (max-width: 760px) {
+            padding: 7px 0px 15px 0px;
+        }
+
+        .noWrap {
+            margin-top: 8px;
+            min-width: fit-content;
+        }
+
+        .entries-moved-details {
+            padding: 0px 12px;
+            margin-bottom: -16px;
+        }
+    }
+
+    ::ng-deep .mdc-line-ripple {
+        display: none;
+    }
+
+    ::ng-deep .mdc-text-field--filled .mdc-floating-label {
+        font-family: "Comfortaa", serif;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+        border-radius: 5px;
+        background-color: #e3e3e4;
+    }
+}

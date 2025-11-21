@@ -1,0 +1,87 @@
+<div class="delivery-person-container d-flex h-100">
+    <div class="list-section" [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'"
+        *ngIf="!devices.isMobileView || openSection === undefined">
+        <div [ngClass]="{'bb': computedData.deliveryPersonList?.length === 0}"
+            class="refresh-section d-flex justify-content-between align-items-center">
+            <div>
+                <div class="line1">{{computedData?.deliveryPersonList?.length}}
+                    {{isSearching? 'Results found':'Delivery Persons'}}
+                </div>
+                <div class="line2">Updated <span>{{computedData?.lastUpdatedStr}} </span>
+                    <span class="refresh" (click)="refreshDeliveryPersonData(true)" tabindex="0"
+                        title="Refresh delivery person list">refresh</span>.
+                </div>
+            </div>
+            <div class="add-delivery-boy d-flex justify-content-center align-items-center" tabindex="0"
+                (click)="onAddNewDeliveryBoy()">
+                <span *ngIf="openSection !== 'newAccount'" title="Add Customer">+</span>
+                <span *ngIf="openSection === 'newAccount'" title="Cancel">x</span>
+            </div>
+        </div>
+
+        <div class="button-section d-flex" *ngIf="computedData.deliveryPersonList?.length > 0">
+            <div class="capsule normal-btn" (click)="toggleStatistics()" tabindex="0">
+                <span class="bold-text">Statistics</span>
+            </div>
+            <div class="capsule normal-btn" (click)="toggleAttendance()" tabindex="0">
+                <span class="bold-text">Attendance</span>
+            </div>
+        </div>
+
+        <div *ngIf="computedData.deliveryPersonList?.length > 0" class="delivery-person-list">
+            <app-user-card *ngFor="let obj of computedData.deliveryPersonList; let i = index" [userObject]="obj"
+                [selected]="selectedIndex === i" (click)="userSelected(obj,i)">
+            </app-user-card>
+        </div>
+
+        <div *ngIf="computedData.deliveryPersonList?.length === 0"
+            class="delivery-person-list d-flex justify-content-center align-items-center flex-column">
+            <img src="assets/images/banner/no-result.png" alt="">
+            <div *ngIf="isSearching" class="m-4 text-center bold-text">No search results found!</div>
+            <div *ngIf="!isSearching" class="m-4 text-center bold-text">You have no delivery person.<br>
+                Add new delivery boys!
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="openSection === 'newAccount'" class="details-section"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+        <app-new-account (onCancel)="openSection = undefined" userType="deliveryPerson"
+            [editProfileId]="selectedDeliveryPerson?.data?.userId || ''" [isEditingProfile]="isEditingProfile"
+            (onDelete)="onDeleteProfile(selectedDeliveryPerson?.data?.userId || '')">
+        </app-new-account>
+    </div>
+
+    <div *ngIf="selectedDeliveryPerson && openSection === 'profile'" class="details-section d-flex flex-column"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+
+        <div *ngIf="devices.isMobileView" class="d-flex back-button bold-text align-items-center cursor-pointer"
+            (click)="selectedDeliveryPerson = undefined; openSection = undefined" tabindex="0">
+            <img src="assets/images/icons/back.png" height="18px" alt="back">
+            <span class="ms-2 pt-2px">Delivery Person List</span>
+        </div>
+
+        <app-user-details [userObject]="selectedDeliveryPerson" [userId]="userId"
+            (onProfileEdit)="onProfileEdit()"></app-user-details>
+
+        <app-entry-data-table [deliveryPersonObject]="selectedDeliveryPerson" [isCustomer]="false"
+            class="flex-grow-1"></app-entry-data-table>
+    </div>
+
+    <div *ngIf="openSection === 'statistics'" class="details-section d-flex flex-column"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+        <app-delivery-statistics></app-delivery-statistics>
+    </div>
+
+    <div *ngIf="openSection === 'attendance'" class="details-section d-flex flex-column"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'">
+        <app-delivery-attendance (openProfileEvent)="openProfile($event)"></app-delivery-attendance>
+    </div>
+
+    <div *ngIf="openSection === undefined && !devices.isMobileView"
+        [ngClass]="devices.isMobileView ? 'w-100' : 'desktop'"
+        class="details-section d-flex justify-content-center align-items-center flex-column">
+        <img src="assets/images/banner/no-result.png" alt="">
+        <div class="m-4 text-center bold-text">Selected a delivery person from the list to view its contents!</div>
+    </div>
+</div>

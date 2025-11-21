@@ -1,0 +1,251 @@
+@import '../../../assets/styles/color.scss';
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__trailing,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__notch {
+    border-color: $primary-web-green !important;
+}
+
+.new-deposit-entry-container {
+    .customer-form {
+        .gap {
+            gap: 10px;
+        }
+
+        .box-input {
+            flex: 1 0 47%;
+        }
+
+        ::ng-deep .mdc-evolution-chip-set__chips {
+            flex-flow: unset !important;
+        }
+
+        .p-relative {
+            position: relative;
+        }
+
+        .margin-0 {
+            margin: 0;
+        }
+
+        .select-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+            border: 1px solid gray;
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+
+            .profile {
+                padding: 7px 10px;
+
+                &:hover {
+                    background-color: $border-very-light2;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .dropdown-number {
+            background-color: $border-light;
+            padding: 3px 5px;
+            border-radius: 5px;
+        }
+
+        .product-select {
+            border: 1px solid $secondary-color;
+            min-height: 56px;
+            padding: 7px 16px;
+            border-radius: 5px;
+            color: #44474e;
+
+            .normal-font {
+                font-family: var(--mdc-outlined-text-field-label-text-font, var(--mat-sys-body-large-font));
+            }
+
+            .product-capsule {
+                background-color: $border-light;
+                padding: 0px 6px;
+                border-radius: 50px;
+            }
+
+            .p-name {
+                color: black;
+                padding-top: 3px;
+                font-size: 15px;
+            }
+
+            &:hover {
+                cursor: pointer;
+                border-color: black;
+                color: black;
+            }
+        }
+
+        .product-select-dropdown {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+            border: 1px solid gray;
+            z-index: 10;
+            overflow-y: auto;
+            border-radius: 5px;
+
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .overflow-y {
+                overflow-y: auto;
+            }
+
+            .b-bottom {
+                border-bottom: 1px solid $secondary-color;
+            }
+
+            .max-height-300 {
+                max-height: 300px;
+                overflow-x: auto;
+            }
+
+            .min-width-490 {
+                min-width: 490px;
+            }
+
+            &.hight-no-limit {
+                max-height: unset;
+            }
+
+            .product-header {
+                padding: 7px 10px;
+                background-color: $border-very-light2;
+            }
+
+            .product {
+                padding: 7px 10px;
+
+                &:hover {
+                    background-color: $light-color;
+                    cursor: pointer;
+                }
+            }
+
+            .product-label {
+                width: 100px;
+
+                &-2 {
+                    @extend .product-label;
+
+                    @media (max-width: 800px) {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 70px;
+                    }
+                }
+            }
+
+            .product-input {
+                width: 100px;
+                padding: 3px 6px;
+                border-radius: 5px;
+                border: 1px solid $secondary-color;
+
+                &-2 {
+                    @extend .product-input;
+
+                    @media (max-width: 800px) {
+                        width: 70px;
+                    }
+                }
+
+                &:disabled {
+                    border: 1px solid $border-light;
+                    color: $border-light;
+                }
+            }
+
+            .product-submit {
+                background-color: #40916c;
+                padding: 7px 10px;
+                color: white;
+
+                &:hover {
+                    background-color: #2d6a4f;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .nowrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &.limit-width-130 {
+                min-width: 130px;
+            }
+        }
+
+        ::ng-deep {
+            .input-section {
+                .mdc-evolution-chip-set__chips {
+                    display: flex;
+                    flex-wrap: wrap !important;
+                }
+            }
+        }
+    }
+
+    .error-msg {
+        font-size: 14px;
+        color: $primary-web-red;
+    }
+
+    .save-btn {
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+
+        &:not(:disabled) {
+            background-color: $primary-web-green;
+            color: white;
+        }
+    }
+
+    .custom-btn {
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        background-color: $border-light;
+        color: $primary-web-dark;
+
+        &.height-auto {
+            height: auto;
+            min-height: 30px;
+        }
+
+        &:hover {
+            &.normal {
+                background-color: $primary-web-green;
+                color: white;
+            }
+
+            &.danger {
+                background-color: $primary-web-red;
+                color: white;
+            }
+        }
+    }
+}

@@ -1,0 +1,127 @@
+<div class="new-full-entry" *ngIf="newEntry">
+    <div class="model-box">
+        <app-new-entry (onCancel)="newEntry=false" (onSubmit)="saveEntry($event)" [openTransaction]="importTransaction"
+            [isImporting]="true">
+        </app-new-entry>
+    </div>
+</div>
+
+<div class="bulk-entry-container">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="heading bold-text">Bulk Entry</div>
+
+        <div>
+            <button *ngIf="!selectedFile" class="custom-btn" mat-flat-button (click)="fileInput.click()">
+                Choose File</button>
+            <input hidden type="file" (change)="onFileSelected($event)" #fileInput accept=".xlsx, .xls">
+            <button *ngIf="selectedFile" class="custom-btn red ms-2" mat-flat-button (click)="removeFile()">
+                Remove File</button>
+        </div>
+    </div>
+
+    <div *ngIf="!selectedFile" class="mt-2">
+        Select an Excel file to upload. The file should be in .xlsx or .xls format.
+        <span class="link-text" (click)="downloadSampleFile()" tabindex="0">Download Sample File</span>
+    </div>
+
+    <div class="mt-3 sheet-section d-flex justify-content-between" *ngIf="sheetList && sheetList.length">
+        <div class="d-flex gap-2 align-items-end tab-div">
+            <div class="sheet-name" [ngClass]="{ 'active': index === currentSheetIndex }"
+                *ngFor="let data of sheetList; let index=index" (click)="changeSheet(index)" tabindex="0">{{data}}
+            </div>
+        </div>
+        <div class="file-name ms-2" title="{{selectedFile.lastModified | date:'dd MMMM yyyy hh:mm:ss a'}}">
+            <span>{{selectedFile.name}}</span> | <span>{{ (selectedFile.size / 1024) | number:'1.0-2' }} KB</span>
+        </div>
+    </div>
+    <div class="sheet-data" *ngIf="sheetList && sheetList.length">
+        <div style="overflow-x:auto;" *ngIf="tableData && tableData.length; else noData">
+            <table class="table table-bordered w-100 m-0">
+                <thead>
+                    <tr>
+                        <th *ngFor="let header of tableStructure">{{ header.name }}</th>
+                        <th>New Entry</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of tableData.slice(0,visibleData); let index=index">
+                        <td>{{ row.data.date }}</td>
+                        <td>
+                            <div [ngClass]="{ 'link-text' : row.data.customer?.userId }"
+                                (click)="openCustomerProfile(row.data.customer)" tabindex="0">{{
+                                row.data.customer?.fullName }}</div>
+                        </td>
+                        <td>
+                            <div class="noWrap address-width">{{ row.data.shippingAddress }}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1" *ngIf="row.data.deliveryBoyList?.length">
+                                <span [ngClass]="{ 'link-text':deliveryBoy.userId}"
+                                    *ngFor="let deliveryBoy of row.data.deliveryBoyList"
+                                    (click)="openDeliveryBoyProfile(deliveryBoy)" tabindex="0">
+                                    {{ deliveryBoy.fullName }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1" *ngIf="row.data.selectedProducts?.length">
+                                <span class="link-text" *ngFor="let product of row.data.selectedProducts"
+                                    (click)="openProduct(product)" tabindex="0">
+                                    {{ product.productData.name }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1" *ngIf="row.data.selectedProducts?.length">
+                                <span *ngFor="let product of row.data.selectedProducts">
+                                    {{ product.sentUnits }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1" *ngIf="row.data.selectedProducts?.length">
+                                <span *ngFor="let product of row.data.selectedProducts">
+                                    {{ product.recievedUnits }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1" *ngIf="row.data.selectedProducts?.length">
+                                <span *ngFor="let product of row.data.selectedProducts">
+                                    {{ product.productData.rate }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>{{ row.data.total || 0}}</td>
+                        <td>{{ row.data.payment || 0}}</td>
+                        <td>
+                            <div class="address-width">
+                                {{ row.data.extraDetails || ''}}
+                            </div>
+                        </td>
+                        <td>
+                            <button [ngClass]="uploadedIndex.includes(index) ? 'added-btn' : 'add-btn'" mat-flat-button
+                                (click)="addEntry(row)">{{uploadedIndex.includes(index) ? 'Added' : 'Add'}}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ng-template #noData>
+            <div class="text-center">No Data Found</div>
+        </ng-template>
+    </div>
+    <div *ngIf="tableData.length" class="mt-3 d-flex justify-content-between align-items-center">
+        <span>Showing {{visibleData}} of {{tableData.length}}.</span>
+        <div>
+            <span *ngIf="visibleData > 10"
+                (click)="(visibleData - 10 > 10) ? (visibleData = visibleData - 10) : (visibleData = 10)"
+                class="link-text me-2" tabindex="0">Show Less</span>
+            <span *ngIf="visibleData < tableData.length"
+                (click)="(visibleData + 10 < tableData.length) ? (visibleData = visibleData + 10) : (visibleData = tableData.length)"
+                class="link-text" tabindex="0">Show More</span>
+        </div>
+    </div>
+</div>

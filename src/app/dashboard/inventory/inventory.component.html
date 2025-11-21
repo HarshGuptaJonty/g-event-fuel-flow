@@ -1,0 +1,315 @@
+<div class="new-full-entry" *ngIf="newEntry">
+    <div class="model-box">
+        <app-new-entry (onCancel)="newEntry=false; isDuplicate=false; openTransaction = undefined; isEditing=false"
+            (onSubmit)="saveEntry($event)" [openTransaction]="openTransaction" (onDelete)="deleteEntry(openTransaction)"
+            [isDuplicate]="isDuplicate" [isEditing]="isEditing">
+        </app-new-entry>
+    </div>
+</div>
+
+<div class="parent-inventory h-100">
+    <div class="inventory-container d-flex flex-column">
+        <div class="d-flex align-items-center flex-wrap gap-15 justify-content-between">
+            <div class="flex-grow-1 d-flex align-items-center">
+                <input #searchInput class="capsule search-box flex-grow-1" type="text" placeholder="Search in inventory"
+                    (input)="onSearch($event)">
+                <img src="assets/images/svg/filter.svg" alt="Filter" title="Filter" class="filter-icon" height="24px"
+                    *ngIf="!filterActive" width="24px" (click)="filterActive = true; updateProductList()" tabindex="0">
+            </div>
+
+            <div class="d-flex align-items-center flex-wrap gap-15 hidden-xs">
+                <div class="capsule entry-btn" (click)="toggleSelectRow()" tabindex="0"
+                    *ngIf="dataSource.data && dataSource.data.length>0">
+                    <span class="bold-text">{{canSelectRows?'Deselect':'Select'}}</span>
+                </div>
+                <div class="capsule export-btn" (click)="openExportPopup()" tabindex="0"
+                    *ngIf="dataSource.data && dataSource.data.length>0">
+                    <span class="bold-text">Export</span>
+                </div>
+                <div class="capsule entry-btn" (click)="newEntry=!newEntry" tabindex="0">
+                    <span class="bold-text">{{newEntry?'Cancel':'New Entry'}}</span>
+                </div>
+                <div class="capsule" (click)="refreshData()" tabindex="0"
+                    [ngClass]="isRefreshing?'disabled-entry-btn':'entry-btn'">
+                    <span class="bold-text">{{isRefreshing?'Refreshing...':'Refresh'}}</span>
+                </div>
+            </div>
+
+            <div class="d-flex visible-xs gap">
+                <div class="d-flex flex-column align-items-center justify-content-end" (click)="toggleSelectRow()"
+                    tabindex="0" *ngIf="processedTableData && processedTableData.length>0">
+                    <img *ngIf="canSelectRows" src="assets/images/icons/close.png" alt="Deselect" width="18px">
+                    <img *ngIf="!canSelectRows" src="assets/images/icons/tick.png" alt="Select" width="20px">
+                    <span class="mt-1">{{canSelectRows?'Deselect':'Select'}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-center" (click)="openExportPopup()" tabindex="0"
+                    *ngIf="processedTableData && processedTableData.length>0">
+                    <img src="assets/images/icons/export.png" alt="Export" width="20px">
+                    <span class="mt-1">Export</span>
+                </div>
+                <div class="d-flex flex-column align-items-center" (click)="newEntry=!newEntry" tabindex="0">
+                    <img src="assets/images/icons/plus.png" alt="Add" width="20px">
+                    <span class="mt-1">Add</span>
+                </div>
+                <div class="d-flex flex-column align-items-center" (click)="isRefreshing ? null : refreshData()"
+                    tabindex="0">
+                    <img src="assets/images/icons/reload.png" alt="Reload" width="20px">
+                    <span class="mt-1">{{isRefreshing?'Loading...':'Refresh'}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section mt-2 d-flex justify-content-between" *ngIf="filterActive" #filterArea>
+            <div class="gap d-flex w-100 flex-wrap flex-grow-1">
+                <div class="p-relative">
+                    <input class="filter-input capsule" #customerName [maxLength]="30" autocomplete="off"
+                        (click)="customerName.select()" placeHolder="Customer Name" (input)="searchCustomer()"
+                        (focus)="onfocus('customerName')">
+                    <div class="select-dropdown"
+                        *ngIf="customerSearchList.length > 0 && focusedFormName === 'customerName'">
+                        <div class="profile" *ngFor="let obj of customerSearchList" (click)="onSelectCustomer(obj)"
+                            tabindex="0">
+                            <span class="bold-text me-2">{{obj.data.fullName}}</span>
+                            <span *ngIf="obj.data?.phoneNumber"
+                                class="dropdown-number">{{formatNumber(obj.data.phoneNumber)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-relative flex-grow-1" *ngIf="shippingAddressList && shippingAddressList.length>0">
+                    <div class="field-selector capsule gap" (click)="onfocus('addressDropdowm')" tabindex="0">
+                        <span class="secondary-color" *ngIf="shippingAddressSubmitted.length === 0">
+                            Select Address</span>
+                        <span class="field-capsule d-flex align-items-center"
+                            *ngFor="let address of shippingAddressSubmitted; let i = index">
+                            <span class="nowrap limit-width-150">{{address}}</span>
+                            <img src="assets/images/svg/close.svg" alt="X" height="16px" class="ms-1"
+                                (click)="removeAddress($event, i)" tabindex="0">
+                        </span>
+                    </div>
+                    <div class="select-dropdown" *ngIf="focusedFormName === 'addressDropdowm'">
+                        <div class="profile" *ngFor="let address of shippingAddressList"
+                            (click)="toggleSelectAddress(address)" tabindex="0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                {{address}}
+                                <img src="assets/images/svg/tick.svg" alt="✔️" height="24px"
+                                    *ngIf="shippingAddressSelectedList.includes(address)">
+                            </div>
+                        </div>
+                        <div class="field-submit" (click)="submitAddressFilters()" tabindex="0"
+                            *ngIf="shippingAddressSelectedList.length>0">Submit</div>
+                    </div>
+                </div>
+                <div class="p-relative flex-grow-1" *ngIf="productList && productList.length>0">
+                    <div class="field-selector capsule gap" (click)="onfocus('productDropdown')" tabindex="0">
+                        <span class="secondary-color" *ngIf="productSubmitted.length === 0">
+                            Select Product</span>
+                        <span class="field-capsule d-flex align-items-center"
+                            *ngFor="let product of productSubmitted; let i = index">
+                            <span class="nowrap limit-width-150">{{product.data.name}}</span>
+                            <img src="assets/images/svg/close.svg" alt="X" height="16px" class="ms-1"
+                                (click)="removeProduct($event, i)" tabindex="0">
+                        </span>
+                    </div>
+                    <div class="select-dropdown" *ngIf="focusedFormName === 'productDropdown'">
+                        <div class="profile" *ngFor="let product of productList" (click)="toggleSelectProduct(product)"
+                            tabindex="0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                {{product.data.name}}
+                                <img src="assets/images/svg/tick.svg" alt="✔️" height="24px"
+                                    *ngIf="productSelectedList.includes(product)">
+                            </div>
+                        </div>
+                        <div class="field-submit" (click)="submitProductFilters()" tabindex="0"
+                            *ngIf="productSelectedList.length>0">Submit</div>
+                    </div>
+                </div>
+                <div class="p-relative flex-grow-1" *ngIf="tagObjectList && tagObjectList.length>0">
+                    <div class="field-selector capsule gap" (click)="onfocus('tagDropdown')" tabindex="0">
+                        <span class="secondary-color" *ngIf="tagsSubmitted.length === 0"> Select Tags</span>
+                        <span class="field-capsule2 d-flex align-items-center"
+                            *ngFor="let tag of tagsSubmitted; let i = index">
+                            <span class="color-ball me-2" [style.background]="'#'+tag.data.colorCode"></span>
+                            <span class="nowrap limit-width-150">{{tag.data.name}}</span>
+                            <img src="assets/images/svg/close.svg" alt="X" height="16px" class="ms-1"
+                                (click)="removeTag($event, i)" tabindex="0">
+                        </span>
+                    </div>
+                    <div class="select-dropdown" *ngIf="focusedFormName === 'tagDropdown'">
+                        <div class="profile" *ngFor="let tag of tagObjectList" (click)="toggleSelectTag(tag)"
+                            tabindex="0">
+                            <div class="d-flex align-items-center">
+                                <span class="color-ball me-2" [style.background]="'#'+tag.data.colorCode"></span>
+                                {{tag.data.name}}
+                                <img src="assets/images/svg/tick.svg" alt="✔️" height="24px"
+                                    *ngIf="tagsSelectedList.includes(tag)">
+                            </div>
+                        </div>
+                        <div class="field-submit" (click)="submitTagFilters()" tabindex="0"
+                            *ngIf="tagsSelectedList.length>0">Submit</div>
+                    </div>
+                </div>
+                <mat-form-field class="date-range-picker field-selector capsule" (click)="onfocus('datePicker')"
+                    tabindex="0">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate #dateRangeStart (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"
+                            placeholder="Start date">
+                        <input matEndDate #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"
+                            placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <img src="assets/images/svg/close-circle.svg" alt="Close" class="close-icon ms-2" (click)="closeFilter()"
+                tabindex="0">
+        </div>
+
+        <div class="w-100 table-div mt-2 flex-grow-1" *ngIf="dataSource.data && dataSource.data.length>0">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="custom-table">
+                <tr mat-header-row *matHeaderRowDef="displayedColumns()" class="custom-header-row nowrap"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns()"
+                    [ngClass]="{'custom-bg-color': row.index % 2 === 0}"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns(2); when: hasSecondRow"
+                    class="custom-expanded-row" [ngClass]="{'custom-bg-color': row.index % 2 === 0}"></tr>
+
+                <ng-container *ngFor="let column of tableStructure" [matColumnDef]="column.key">
+                    <th mat-header-cell *matHeaderCellDef class="custom-header-cell" [ngClass]="column.customClass">
+                        {{column.label}}</th>
+                    <td mat-cell *matCellDef="let value" class="custom-mat-cell {{column.customClass}}"
+                        [ngClass]="{'no-border-bottom': value.hasSecondRow}"
+                        [style.background]="'#'+value.highLightColor">
+                        <ng-container
+                            *ngTemplateOutlet="getTemplate(column.dataType); context: {$implicit: value, column: column}"></ng-container>
+                    </td>
+                </ng-container>
+
+                <ng-container *ngFor="let column of secondRowTableStructure" [matColumnDef]="column.key">
+                    <td mat-cell *matCellDef="let value" [attr.colspan]="column.width"
+                        [style.background]="'#'+value.highLightColor">
+                        <ng-container
+                            *ngTemplateOutlet="getTemplate(column.dataType); context: {$implicit: value, column: column}"></ng-container>
+                    </td>
+                </ng-container>
+            </table>
+            <mat-paginator *ngIf="dataSource.data && dataSource.data.length>10"
+                [pageSizeOptions]="[10, 20, 50, 80, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <div *ngIf="(!dataSource.data || dataSource.data.length === 0) && !newEntry"
+            class="flex-grow-1 d-flex justify-content-center align-items-center flex-column">
+            <img src="assets/images/banner/no-result.png" alt="">
+            <div class="m-4 text-center bold-text">
+                {{isSearching? 'No Search result found!':'No entries to show!'}}
+                <div class="secondary-color mt-1" *ngIf="!isSearching">
+                    Please add new entries!
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-section d-flex gap-15 flex-wrap" #statArea>
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.sentList?.length>0 && focusedFormName === 'sentList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.sentList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('sentList', 'sentSum')" tabindex="0">
+                    Sent: {{getStat('sentSum')}}
+                </span>
+            </div>
+
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.recieveList?.length>0 && focusedFormName === 'recieveList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.recieveList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('recieveList', 'recieveSum')" tabindex="0">
+                    Recieved: {{getStat('recieveSum')}}
+                </span>
+            </div>
+
+            <div class="p-relative d-flex">
+                <div class="list-view d-flex flex-column"
+                    *ngIf="statistics?.pendingList?.length>0 && focusedFormName === 'pendingList'">
+                    <div class="d-flex justify-content-between gap" *ngFor="let obj of statistics?.pendingList">
+                        <span class="nowrap" [ngClass]="obj.customClass">{{obj.name}}</span>
+                        <span>{{obj.value}}</span>
+                    </div>
+                </div>
+                <span class="isclickable" (click)="getDetailedStat('pendingList', 'pending')" tabindex="0">
+                    Pending: {{getStat('pending')}}
+                </span>
+            </div>
+
+            <span>Due {{devices.isMobileView ? 'Amt' : 'Amount'}}: {{getStat('dueAmt') | number: '1.2-2'}}</span>
+        </div>
+
+        <ng-template #checkBox let-value>
+            <mat-checkbox [checked]="selectedRows.includes(value)" (click)="selectRow(value, $event)"
+                tabindex="0"></mat-checkbox>
+        </ng-template>
+
+        <ng-template #plainText let-value let-column="column">
+            <span class="nowrap default-font">{{value?.[column.key]}}</span>
+        </ng-template>
+
+        <ng-template #amountText let-value let-column="column">
+            <span class="nowrap">{{value?.[column.key] | number: '1.2-2'}}</span>
+        </ng-template>
+
+        <ng-template #cnameText let-value let-column="column">
+            <span class="name-text nowrap" tabindex="0"
+                (click)="openCustomerProfile(value?.[column.key])">{{value?.[column.key]?.fullName}}
+            </span>
+        </ng-template>
+
+        <ng-template #dnameText let-value let-column="column">
+            <div *ngFor="let user of value?.[column.key]" class="my-2">
+                <span class="name-text nowrap" tabindex="0" (click)="openDeliveryBoyProfile(user)">
+                    {{user?.fullName}}
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template #actionText let-value let-column="column">
+            <div class="nowrap d-flex flex-column align-items-center">
+                <div>
+                    <span class="name-text" (click)="editEntry(value)" tabindex="0">Edit</span> |
+                    <span class="name-text" (click)="showMore(value)" tabindex="0">More</span>
+                </div>
+                <span class="name-text" (click)="duplicate(value)" tabindex="0">Duplicate</span>
+            </div>
+        </ng-template>
+
+        <ng-template #productDetail let-value let-column="column">
+            <div *ngFor="let data of value.productDetail" class="my-2">
+                <span *ngIf="column.isAmount">{{getValue(data, column.key) | number: '1.2-2'}}</span>
+                <span *ngIf="!column.isAmount" class="nowrap">
+                    <span *ngIf="!column.isLink">{{getValue(data, column.key)}}</span>
+                    <div *ngIf="column.isLink" class="name-text" (click)="openProduct(data)" tabindex="0">
+                        {{getValue(data, column.key)}}
+                    </div>
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template #tagList let-value let-column="column">
+            <div class="d-flex gap">
+                <div *ngFor="let tagId of value.tagList; let index = index">
+                    <div *ngIf="tagObject?.[tagId]" class="tag-chip d-flex align-items-center" (click)="openTag(tagId)"
+                        tabindex="0" [title]="tagObject?.[tagId]?.data.extraNote">
+                        <span class="color-ball me-2" *ngIf="index > 0"
+                            [style.background]="'#'+tagObject?.[tagId]?.data.colorCode"></span>
+                        <span class="tag-name">{{tagObject?.[tagId]?.data.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

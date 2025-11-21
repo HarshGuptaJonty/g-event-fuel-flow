@@ -1,0 +1,74 @@
+@import '../../../assets/styles/color.scss';
+
+.confirmation-model-container {
+    z-index: 9999;
+    font-family: "Comfortaa", serif;
+
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+
+    .model-box {
+        width: 25%;
+        min-width: 500px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px 25px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+        @media (max-width: 500px) {
+            min-width: calc(100vw - 100px);
+        }
+
+        @media (max-width: 340px) {
+            min-width: 290px;
+        }
+    }
+
+    .button-box {
+        margin-top: 30px;
+    }
+
+    .heading {
+        font-size: 28px;
+    }
+
+    .custom-btn {
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .grey-btn {
+        background-color: $border-light;
+        color: $primary-web-dark;
+
+        &:hover {
+            background-color: $border-very-light;
+        }
+
+        &-red {
+            @extend .grey-btn;
+
+            &:hover {
+                background-color: $primary-web-red;
+                color: white;
+            }
+        }
+
+        &-blue {
+            @extend .grey-btn;
+
+            &:hover {
+                background-color: $primary-mat-color;
+                color: white;
+            }
+        }
+    }
+}

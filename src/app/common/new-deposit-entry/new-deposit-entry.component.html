@@ -1,0 +1,113 @@
+<div class="new-deposit-entry-container">
+    <span class="heading bold-text">{{isEditing? 'Edit Deposit Entry':'Add New Deposit Entry'}}</span>
+
+    <div *ngIf="!isEditing">Please provide the following details.</div>
+    <div *ngIf="isEditing && transactionId">Transaction ID: {{transactionId}}</div>
+
+    <form [formGroup]="entryForm" #formSection class="customer-form mt-3">
+        <div class="mt-2 bold-text">Deposit details.</div>
+        <div class="gap d-flex w-100 flex-wrap mt-1">
+            <div class="box-input">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="date" (focus)="onfocus('date')">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="box-input">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Paid Amount</mat-label>
+                    <input matInput placeholder="1400" [maxLength]="10" autocomplete="off" formControlName="paidAmt"
+                        (focus)="onfocus('paidAmt')">
+                </mat-form-field>
+            </div>
+            <div class="box-input">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Return Amount</mat-label>
+                    <input matInput placeholder="1400" [maxLength]="10" autocomplete="off" formControlName="returnAmt"
+                        (focus)="onfocus('paidAmt')">
+                </mat-form-field>
+            </div>
+            <div class="box-input">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Extra details</mat-label>
+                    <input matInput placeholder="Payment might be delayed..." autocomplete="off"
+                        formControlName="extraDetails" (focus)="onfocus('extraDetails')">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="gap d-flex w-100 flex-wrap mt-2">
+            <div class="w-100 p-relative h-100">
+                <div class="d-flex gap flex-wrap">
+                    <div class="product-select d-flex align-items-center gap flex-wrap flex-grow-1"
+                        (click)="onfocus('productSelect')" tabindex="0">
+                        <span class="normal-font" *ngIf="selectedProductList.length === 0">Select product items</span>
+                        <span class="product-capsule d-flex align-items-center"
+                            *ngFor="let productQuantity of selectedProductList; let i = index">
+                            <span class="p-name bold-text gap">
+                                {{productQuantity.productData.name}}:
+                                <span *ngIf="productQuantity.sentUnits">{{productQuantity.sentUnits}}S</span>
+                                <span *ngIf="productQuantity.recievedUnits">{{productQuantity.recievedUnits}}R</span>
+                            </span>
+                            <img src="assets/images/svg/close.svg" alt="X" height="16px" class="ms-1"
+                                (click)="removeProduct($event, i)" tabindex="0">
+                        </span>
+                    </div>
+                    <button *ngIf="allowAddProduct" mat-flat-button (click)="addProduct()"
+                        class="custom-btn normal height-auto">Add Product</button>
+                </div>
+                <div class="product-select-dropdown" *ngIf="focusedFormName === 'productSelect'">
+                    <div class="overflow-y">
+                        <div class="min-width-490">
+                            <div
+                                class="product-header d-flex justify-content-between align-items-center bold-text b-bottom">
+                                <span class="nowrap limit-width-130 me-1">Name</span>
+                                <div class="d-flex gap">
+                                    <span class="product-label-2">Rate</span>
+                                    <span class="product-label-2">Sent</span>
+                                    <span class="product-label-2">Recieved</span>
+                                    <span class="product-label">Payment</span>
+                                </div>
+                            </div>
+                            <div class="max-height-300 no-scrollbar">
+                                <div class="product d-flex justify-content-between align-items-center"
+                                    *ngFor="let product of productList">
+                                    <span class="bold-text nowrap limit-width-130 me-1">{{product.data.name}}</span>
+                                    <div class="d-flex gap">
+                                        <input class="product-input-2" [value]="product.data.rate" type="number"
+                                            onKeyPress="if(this.value.length==4) return false;"
+                                            [id]="'rate_'+product.data.productId">
+                                        <input class="product-input-2" value="0" type="number"
+                                            onKeyPress="if(this.value.length==4) return false;"
+                                            [id]="'sent_'+product.data.productId">
+                                        <input class="product-input-2" value="0" type="number"
+                                            onKeyPress="if(this.value.length==4) return false;"
+                                            [disabled]="!product.data.productReturnable"
+                                            [id]="'recieved_'+product.data.productId">
+                                        <input class="product-input" value="0" type="number"
+                                            onKeyPress="if(this.value.length==6) return false;"
+                                            [id]="'payment_'+product.data.productId">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-submit text-center" (click)="submitProductSelection()" tabindex="0">Submit</div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="error-msg mt-2 bold-text" *ngIf="errorMessage">{{errorMessage}}</div>
+    <div class="mt-3 justify-content-between d-flex customer-form flex-wrap gap-3">
+        <div class="gap-3 d-flex flex-wrap">
+            <button mat-flat-button (click)="onCancelClick()" class="custom-btn cancel-btn danger">Cancel</button>
+            <button mat-flat-button (click)="onDeleteClick()" *ngIf="isEditing"
+                class="custom-btn cancel-btn danger">Delete</button>
+        </div>
+        <div class="gap-3 d-flex flex-wrap">
+            <button mat-flat-button (click)="onRefreshData()" class="custom-btn normal">Refresh</button>
+            <button mat-flat-button (click)="onSaveClick()" class="save-btn" [disabled]="disableSave">Save</button>
+        </div>
+    </div>
+</div>

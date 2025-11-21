@@ -1,0 +1,13 @@
+@import '../styles/mediaQueries.scss';
+
+.visible-xs {
+    @include screen-tab-desk {
+        display: none !important;
+    }
+}
+
+.hidden-xs {
+    @include screen-mob {
+        display: none !important;
+    }
+}

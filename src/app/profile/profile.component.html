@@ -1,0 +1,270 @@
+<div class="profile-container d-flex">
+    <div class="left-banner d-flex flex-column"
+        *ngIf="!devices.isMobileView || (!showConfiguration && !showNavigation)">
+
+        <div *ngIf="devices.isMobileView"
+            class="d-flex next-button bold-text cursor-pointer flex-column align-items-end">
+            <div class="d-flex align-items-center" (click)="showConfiguration = true" tabindex="0">
+                <span class="me-1 pt-1p">Configuration</span>
+                <img src="assets/images/icons/next.png" height="18px" alt="next">
+            </div>
+            <div class="d-flex align-items-center mt-1" (click)="showNavigation = true" tabindex="0">
+                <span class="me-1 pt-1p">Navigation</span>
+                <img src="assets/images/icons/next.png" height="18px" alt="next">
+            </div>
+        </div>
+
+        <div>
+            <img class="profile-image" title="Profile" *ngIf="!profilePicLink && adminProfileData?.male"
+                src="assets/images/svg/profile_male.svg" alt="Male profile Image">
+            <img class="profile-image" title="Profile" *ngIf="!profilePicLink && !adminProfileData?.male"
+                src="assets/images/svg/profile_female.svg" alt="Male profile Image">
+            <img class="profile-image" title="Profile" *ngIf="profilePicLink" [src]="profilePicLink"
+                alt="Male profile Image" (error)="profilePicLink = undefined">
+        </div>
+
+        <div class="profile-detail mt-4">
+            <div class="heading bold-text">{{adminProfileData?.fullName}}</div>
+            <div class="mt-3">
+                <div class="bold-text">Number</div>
+                <div class="mt-1 secondary-color">+{{adminProfileData?.contact?.countryCode || '91'}}
+                    {{getNumberInformat(adminProfileData?.contact?.phoneNumber)}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Gender</div>
+                <div class="mt-1 secondary-color">{{adminProfileData?.male ? 'Male':'Female'}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Account Created</div>
+                <div class="mt-1 secondary-color">{{formatDateAndTime(adminProfileData?.importantTimes?.createdAt)}}
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Last Login</div>
+                <div class="mt-1 secondary-color">{{formatDateAndTime(adminProfileData?.importantTimes?.lastSeen)}}
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Current Version</div>
+                <div class="mt-1 secondary-color">v{{localStorage.CURRENT_VERSION}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Last Updated</div>
+                <div class="mt-1 secondary-color">{{localStorage.LAST_UPDATED}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="bold-text">Data Used (Session)</div>
+                <div class="mt-1 secondary-color">{{dataUsed}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-section" *ngIf="!devices.isMobileView || showConfiguration || showNavigation">
+
+        <div *ngIf="devices.isMobileView"
+            class="d-flex back-button bold-text align-items-center cursor-pointer mb-2 justify-content-between">
+            <div (click)="showConfiguration = false; showNavigation = false" tabindex="0">
+                <img src="assets/images/icons/back.png" height="18px" alt="back">
+                <span class="ms-2 pt-2p">Profile</span>
+            </div>
+            <div (click)="showConfiguration = true; showNavigation = false" tabindex="0"
+                *ngIf="showConfiguration === false">
+                <span class="ms-2 pt-2p">Configurations</span>
+                <img src="assets/images/icons/next.png" height="18px" alt="next">
+            </div>
+            <div (click)="showNavigation = true; showConfiguration = false" tabindex="0"
+                *ngIf="showNavigation === false">
+                <span class="ms-2 pt-2p">Navigation</span>
+                <img src="assets/images/icons/next.png" height="18px" alt="next">
+            </div>
+        </div>
+
+        <div *ngIf="!devices.isMobileView || showConfiguration">
+            <div class="heading bold-text">Configurations</div>
+            <form [formGroup]="settingForm" (submit)="onSave()" class="mb-4">
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Export file type</span>
+                    <mat-chip-listbox formControlName="exportFileType">
+                        <mat-chip-option class="custom-chip" value="excel">Excel</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="pdf">PDF</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="ask">Ask me everytime</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('exportFileType')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Size of exporting data</span>
+                    <mat-chip-listbox formControlName="exportDataSize">
+                        <mat-chip-option class="custom-chip" value="allPage">All Pages</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="thisPage">Visible Page</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="onlySelected">Only selected rows</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="ask">Ask me everytime</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('exportDataSize')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Data to include</span>
+                    <mat-chip-listbox formControlName="dataToInclude" multiple>
+                        <mat-chip-option class="custom-chip" value="newSheet">New sheet per customer</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="newAddress">New sheet per address</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="totalRow">Show total row</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Delete old entry when date edited</span>
+                    <mat-chip-listbox formControlName="oldEntryWhenDateEdited">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="ask">Ask me everytime</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('oldEntryWhenDateEdited')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Default date while adding new entry?</span>
+                    <mat-chip-listbox formControlName="defaultDateOnNewEntry">
+                        <mat-chip-option class="custom-chip" value="previousDay">Previous Day</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="currentDay">Current Day</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="nextDay">Next Day</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="custom">Custom{{customDate}}</mat-chip-option>
+                        <div class="test12">
+                            <input matInput [matDatepicker]="picker" [formControl]="customDateControl" hidden>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker" hidden></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </div>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('defaultDateOnNewEntry')?.invalid">This is a
+                    required field.</div>
+                <div class="invalid-form-control" *ngIf="!isCustomDateValid()">Please select custom date.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Ask for confirmation when editing</span>
+                    <mat-chip-listbox formControlName="askForConfirmationOnEdit">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('askForConfirmationOnEdit')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Ask for confirmation when duplicating</span>
+                    <mat-chip-listbox formControlName="askForConfirmationOnDuplicate">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('askForConfirmationOnDuplicate')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Ask for confirmation for saving new address</span>
+                    <mat-chip-listbox formControlName="askForConfirmationOnNewAddress">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('askForConfirmationOnNewAddress')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Close deposit entry when new customer profile is opened?</span>
+                    <mat-chip-listbox formControlName="closeDepositEntryOnSelectProfile">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('closeDepositEntryOnSelectProfile')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Show negative pending returns in stat page?</span>
+                    <mat-chip-listbox formControlName="showNegativePendingReturns">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('showNegativePendingReturns')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration"
+                    *ngIf="!devices.isMobileView">
+                    <span>Log efficiency time for loading pages?</span>
+                    <mat-chip-listbox formControlName="showEfficiencyTracker">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('showEfficiencyTracker')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration"
+                    *ngIf="!devices.isMobileView">
+                    <span>Log data downloaded?</span>
+                    <mat-chip-listbox formControlName="showDataLoadedTracker">
+                        <mat-chip-option class="custom-chip" value="yes">Yes</mat-chip-option>
+                        <mat-chip-option class="custom-chip" value="no">No</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+                <div class="invalid-form-control" *ngIf="settingForm.get('showDataLoadedTracker')?.invalid">
+                    This is a required field.</div>
+
+                <div class="justify-content-between d-flex align-items-center flex-wrap configuration">
+                    <span>Clear local saved data (cache)</span>
+                    <mat-chip-listbox [formControl]="clearCache" (click)="onClearCache()">
+                        <mat-chip-option class="custom-chip" value="clear">Clear cache</mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+
+                <div class="justify-content-between d-flex mt-4" *ngIf="formChanged">
+                    <button mat-flat-button class="custom-btn grey-btn-red" type="button"
+                        (click)="onReset()">Reset</button>
+                    <button mat-flat-button class="custom-btn" type="submit"
+                        *ngIf="settingForm.valid && isCustomDateValid()">
+                        Save Settings</button>
+                </div>
+            </form>
+        </div>
+
+        <div [ngClass]="{ 'line-border pt-3' : !devices.isMobileView }" *ngIf="!devices.isMobileView || showNavigation">
+            <div class="heading bold-text">Navigation</div>
+            <form [formGroup]="navSettingForm" (submit)="onNavSave()" class="mb-4">
+                <div cdkDropList (cdkDropListDropped)="onNavDrop($event)"
+                    class="d-flex flex-column mt-2 nav-list-div flex-wrap">
+                    <div *ngFor="let navigation of navigationArray" cdkDrag class="nav-item">
+                        <div class="justify-content-between d-flex align-items-center flex-wrap mt-0 gap-2"
+                            [ngClass]="{ 'child' : navigation.key === 'log-out' || navigation.key === 'custom-develop' || navigation.key === 'move-entries'}">
+                            <div>
+                                <img src="assets/images/icons/drag-handel.png" alt="drag" height="24px" class="me-2">
+                                {{ navigation.title }}
+                            </div>
+
+                            <div class="invalid-form-control mt-0" *ngIf="navSettingForm.get(navigation.key)?.invalid">
+                                This is a required field.</div>
+
+                            <mat-chip-listbox [formControlName]="navigation.key" class="option-list"
+                                *ngIf="navigation.key !== 'log-out' && navigation.key !== 'custom-develop' && navigation.key !== 'move-entries'">
+                                <mat-chip-option class="custom-chip" value="top">Top</mat-chip-option>
+                                <mat-chip-option class="custom-chip" value="side">Side</mat-chip-option>
+                            </mat-chip-listbox>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="justify-content-between d-flex mt-4" *ngIf="navFormChanged">
+                    <button mat-flat-button class="custom-btn grey-btn-red" type="button"
+                        (click)="onNavReset()">Reset</button>
+                    <button mat-flat-button class="custom-btn" type="submit" *ngIf="navSettingForm.valid">
+                        Save Navigation Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

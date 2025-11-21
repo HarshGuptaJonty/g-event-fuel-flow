@@ -1,0 +1,132 @@
+<div class="move-entries-container d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="heading bold-text">Move Entries</div>
+        @if(history.length>0){
+        <img src="assets/images/icons/history.png" height="24px" alt="History" class="cursor-pointer"
+            (click)="showHistory=true" title="View Move History">
+        }
+    </div>
+
+    <div class="mt-2">
+        Select the source account and the target account.
+        Only Selected entries will be moved to the target account.
+        <br>
+        <span class="bold-text">Please note, shipping address will not be updated, you need to update them manually if
+            required.</span>
+    </div>
+
+    <form [formGroup]="accountForm" class="d-flex align-items-center mt-2 input-section flex-wrap">
+        <mat-form-field class="min-input-width">
+            <mat-label>Target Account</mat-label>
+            <input matInput placeholder="Search target account name" autocomplete="off" [matAutocomplete]="targetAuto"
+                formControlName="targetAccount">
+            <mat-autocomplete #targetAuto="matAutocomplete">
+                @for (account of targetAccountsList | async; track account.data.userId) {
+                <mat-option [value]="account.data.fullName"
+                    (onSelectionChange)="selectedTargetAccount=account; canLoadEntries=true">{{account.data.fullName}} -
+                    {{account.data.phoneNumber}}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <img src="assets/images/icons/left-arrow.png" height="40px" alt="To" class="arrow">
+
+        <mat-form-field class="min-input-width">
+            <mat-label>Source Account</mat-label>
+            <input matInput placeholder="Search source account name" autocomplete="off" [matAutocomplete]="sourceAuto"
+                formControlName="sourceAccount">
+            <mat-autocomplete #sourceAuto="matAutocomplete">
+                @for (account of sourceAccountsList | async; track account.data.userId) {
+                <mat-option [value]="account.data.fullName"
+                    (onSelectionChange)="selectedSourceAccount=account; canLoadEntries=true">{{account.data.fullName}} -
+                    {{account.data.phoneNumber}}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="flex-grow-1 min-width-350" *ngIf="entriesToBeMoved.length>0 && !canLoadEntries">
+            <mat-label>Reason for future reference ({{accountForm.get('extraNote')?.value?.length}}/100)</mat-label>
+            <input matInput placeholder="Reason for moving entries" autocomplete="off" formControlName="extraNote"
+                maxlength="100">
+        </mat-form-field>
+    </form>
+
+    <div class="mt-3" *ngIf="selectedSourceAccount && selectedTargetAccount">
+        You are moving entries from
+        <span class="link-text"
+            (click)="openProfile(selectedSourceAccount)">{{selectedSourceAccount.data.fullName}}</span> into
+        <span class="link-text"
+            (click)="openProfile(selectedTargetAccount)">{{selectedTargetAccount.data.fullName}}</span>
+        <span *ngIf="canLoadEntries"> click <span class="link-text" (click)="loadEntries()"> confirm</span> to
+            continue</span>.
+    </div>
+
+    @if(entriesToBeMoved.length>0 && !canLoadEntries) {
+    <app-entry-data-table (moveEntries)="moveEntries($event)" [loadEntries]="entriesToBeMoved"
+        [isLoadCustomEntries]="true" [showCheckBox]="true" class="flex-grow-1 mt-3"></app-entry-data-table>
+    }
+
+    @if(showHistory){
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="heading bold-text">Move History</div>
+            @if (openTransactionId) {
+            <div class="filter-box d-flex align-items-center gap-2">
+                {{openTransactionId}}
+                <img src="assets/images/icons/close.png" alt="Close" height="12px" class="cursor-pointer"
+                    (click)="openTransactionId=''" title="Clear Filter">
+            </div>
+            }
+        </div>
+        <img src="assets/images/icons/close.png" height="20px" alt="Close" class="cursor-pointer"
+            (click)="showHistory=false" title="Close Move History">
+    </div>
+
+    <div class="accordian-div d-flex flex-column gap-3 pt-2">
+        @for (data of history; track data.moveId) {
+        @if(openTransactionId.length === 0 || data.transactionIdList.includes(openTransactionId)) {
+        <div class="accordian-box d-flex flex-column">
+            <div class="d-flex row flex-wrap no-margin">
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">Date</span>
+                    <span class="bold-text">{{ data.moveTime | date: 'dd MMM yy - h:mm a' }}</span>
+                </div>
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">From User</span>
+                    <span class="bold-text link-text" (click)="openProfile(data.fromUserId)">{{
+                        getCustomerName(data.fromUserId) }}</span>
+                </div>
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">To User</span>
+                    <span class="bold-text link-text" (click)="openProfile(data.toUserId)">{{
+                        getCustomerName(data.toUserId) }}</span>
+                </div>
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">Moved By</span>
+                    <span class="bold-text">{{ getAdminName(data.movedBy) }}</span>
+                </div>
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">Number of Entries</span>
+                    <span class="bold-text link-text"
+                        (click)="expandedHistoryId = expandedHistoryId === data.moveId ? '' : data.moveId">{{data.transactionIdList.length}}
+                        Entries</span>
+                </div>
+                @if (data.extraNote) {
+                <div class="d-flex flex-column col-2 noWrap">
+                    <span class="secondary-color mb-1">Reason</span>
+                    <span class="bold-text">{{data.extraNote}}</span>
+                </div>
+                }
+            </div>
+            @if (expandedHistoryId === data.moveId) {
+            <div class="entries-moved-details mt-2">
+                <app-entry-data-table [loadEntries]="getHistoryEntriesList(data.moveId, data.transactionIdList)"
+                    [isLoadCustomEntries]="true" class="flex-grow-1 mt-3"></app-entry-data-table>
+            </div>
+            }
+        </div>
+        }
+        }
+    </div>
+    }
+</div>

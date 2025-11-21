@@ -1,0 +1,56 @@
+@import '../../../assets/styles/color.scss';
+
+.notification-container {
+    z-index: 9999;
+    font-family: "Comfortaa", serif;
+    position: fixed;
+    top: 90px;
+    user-select: none;
+
+    .notification-card {
+        background-color: $light-color;
+        padding: 10px 20px 10px 20px;
+        min-width: 250px;
+        max-width: 500px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        animation: faideInOut 5s ease-in-out;
+        border-left: 5px solid $primary-mat-color;
+    }
+
+    .message {
+        max-width: 300px;
+    }
+
+    &.moved-right {
+        right: 25px;
+        left: auto;
+    }
+
+    &.moved-left {
+        right: auto;
+        left: 25px;
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(-90px);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-90px);
+    }
+}

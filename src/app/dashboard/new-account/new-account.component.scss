@@ -1,0 +1,106 @@
+@import '../../../assets/styles/color.scss';
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-floating-label {
+    color: $primary-web-green !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__trailing,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--invalid).mdc-text-field--focused .mdc-notched-outline__notch {
+    border-color: $primary-web-green !important;
+}
+
+.new-user-container {
+    padding: 30px 40px 40px 40px;
+
+    .heading {
+        font-size: 28px;
+    }
+
+    .custom-btn {
+        min-width: 150px;
+        font-family: "Comfortaa", serif;
+        border-radius: 5px;
+
+        &:not(:disabled) {
+            background-color: $primary-web-green;
+            color: white;
+        }
+    }
+
+    .limit-textarea {
+        &-1 {
+            min-height: 40px;
+            max-height: 100px;
+        }
+
+        &-2 {
+            min-height: 40px;
+            max-height: 200px;
+        }
+    }
+
+    .adjust-margin {
+        margin-bottom: -10px;
+    }
+
+    .user-form {
+        max-width: 800px;
+
+        .error-msg {
+            font-size: 14px;
+            color: $primary-web-red;
+        }
+
+        .remove-address-btn {
+            height: auto;
+            font-family: "Comfortaa", serif;
+            border-radius: 5px;
+            background-color: #e3e3e4;
+            color: $primary-web-dark;
+
+            &:hover {
+                background-color: $primary-web-red;
+                color: white;
+            }
+        }
+    }
+
+    .button-section {
+        max-width: 800px;
+
+        .cancel-btn {
+            background-color: #e3e3e4;
+            color: $primary-web-dark;
+
+            &:hover {
+                background-color: $primary-web-red;
+                color: white;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .custom-btn {
+                min-width: 100px;
+            }
+        }
+    }
+
+    .nowrap {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 1440px) {
+    .new-user-container {
+        padding: 30px 40px 40px 40px;
+    }
+}
+
+@media (max-width: 900px) {
+    .new-user-container {
+        padding: 15px 20px 20px 20px;
+    }
+}

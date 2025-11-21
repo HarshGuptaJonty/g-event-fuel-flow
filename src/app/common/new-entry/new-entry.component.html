@@ -1,0 +1,242 @@
+<div class="new-entry-container">
+    <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div>
+            <span class="heading bold-text">{{isEditing? 'Edit Entry':'Add New Entry'}}</span>
+            <div *ngIf="!isEditing">Please provide the following details.</div>
+            <div *ngIf="isEditing && transactionId">Transaction ID: {{transactionId}}</div>
+        </div>
+        <div class="d-flex gap-3 height-fit-content">
+            <div class="cursor-pointer d-flex gap-2 align-items-center" (click)="onSaveClick()" tabindex="0">
+                <img src="assets/images/icons/custom-save.png" alt="Save" height="25px">
+                <div>Save</div>
+            </div>
+            <div class="action-section d-flex gap-2 align-items-center" (click)="onRefreshData()" tabindex="0">
+                <img src="assets/images/icons/custom-reload.png" alt="Refresh" height="25px">
+                <div>Refresh</div>
+            </div>
+            <div class="action-section d-flex gap-2 align-items-center" (click)="onDeleteClick()" tabindex="0">
+                <img src="assets/images/icons/custom-delete.png" alt="Delete" height="25px">
+                <div>Delete</div>
+            </div>
+            <div class="action-section d-flex gap-2 align-items-center" (click)="onCancelClick()" tabindex="0">
+                <img src="assets/images/icons/custom-close.png" alt="Close" height="25px">
+                <div>Close</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="parent-of-three d-flex flex-wrap gap-3 mt-3">
+        <div class="first-child d-flex flex-column gap-3 part">
+            <div class="customer-child child"
+                [ngClass]="customerForm.touched ? customerForm.invalid ? 'invalid-form' : 'valid-form' : ''">
+                <div class="bold-text">Customer details.</div>
+
+                <form [formGroup]="customerForm" class="mt-2">
+                    <mat-form-field class="w-100 margin-bottom-15">
+                        <mat-label>Full name.</mat-label>
+                        <input matInput placeholder="Search" autocomplete="off" formControlName="name"
+                            [matAutocomplete]="cnameAuto">
+                        <mat-autocomplete #cnameAuto="matAutocomplete">
+                            @for (option of cNameFilter | async; track option.data.userId) {
+                            <mat-option [value]="option.data.fullName"
+                                (onSelectionChange)="onSelectCustomer(option)">{{option.data.fullName}} -
+                                {{option.data.phoneNumber}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field class="w-100  margin-bottom-15">
+                        <mat-label>Contact number.</mat-label>
+                        <input matInput placeholder="xxxx xxx xxx" [maxLength]="10" autocomplete="off"
+                            formControlName="number" [matAutocomplete]="cphoneAuto">
+                        <mat-autocomplete #cphoneAuto="matAutocomplete">
+                            @for (option of cNumberFilter | async; track option.data.userId) {
+                            <mat-option [value]="option.data.phoneNumber"
+                                (onSelectionChange)="onSelectCustomer(option)">{{option.data.fullName}} -
+                                {{option.data.phoneNumber}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Address.</mat-label>
+                        <input matInput placeholder="Search" autocomplete="off" formControlName="address"
+                            [matAutocomplete]="caddressAuto">
+                        <mat-autocomplete #caddressAuto="matAutocomplete">
+                            @for (option of addressFilters | async; track option) {
+                            <mat-option [value]="option"
+                                (onSelectionChange)="shippingAddressSelected = true">{{option}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+
+                <div class="mt-2 smaller-text text-red" *ngIf="customerForm.get('name')?.value && !customerSelected">•
+                    New Customer profile will be created!</div>
+                <div class="mt-2 smaller-text text-red"
+                    *ngIf="customerForm.get('address')?.value && !shippingAddressSelected">• New Shipping Address will
+                    be saved!</div>
+            </div>
+
+            <div class="child"
+                [ngClass]="otherDetailForm.touched ? otherDetailForm.invalid ? 'invalid-form' : 'valid-form' : ''">
+                <div class="bold-text">Extra details.</div>
+
+                <form [formGroup]="otherDetailForm" class="mt-2">
+                    <mat-form-field class="w-100 margin-bottom-15">
+                        <mat-label>Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="date" placeholder="DD/MM/YYYY"
+                            autocomplete="off">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100 margin-bottom-5">
+                        <mat-label>Paid Amount</mat-label>
+                        <input matInput placeholder="1400" [maxLength]="10" autocomplete="off"
+                            formControlName="paidAmt">
+                    </mat-form-field>
+
+                    <div class="justify-content-between d-flex align-items-center flex-wrap w-100 margin-bottom-5">
+                        <mat-chip-listbox formControlName="status">
+                            <mat-chip-option value="Paid">Paid</mat-chip-option>
+                            <mat-chip-option value="Due">Due</mat-chip-option>
+                        </mat-chip-listbox>
+                    </div>
+
+                    <mat-form-field class="w-100 margin-bottom-15">
+                        <mat-label>Extra details</mat-label>
+                        <input matInput placeholder="Payment might be delayed..." autocomplete="off"
+                            formControlName="extraDetails">
+                        <!-- [matAutocomplete]="extraDetailsAuto"> -->
+                        <!-- <mat-autocomplete #extraDetailsAuto="matAutocomplete">
+                            @for (option of extraDetailsOptions; track option) {
+                            <mat-option [value]="option">{{option}}</mat-option>
+                            }
+                        </mat-autocomplete> -->
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100">
+                        <mat-label>Select Tags</mat-label>
+                        <mat-chip-grid #tagChipGrid aria-label="Tags selection">
+                            @for (tagId of selectedTags; track $index) {
+                            <mat-chip-row (removed)="removeTagFromList(tagId)" *ngIf="tagObject?.[tagId]"
+                                [style.background]="'#'+tagObject?.[tagId].data.colorCode">
+                                <div class="d-flex align-items-center">
+                                    <span class="set-font"
+                                        [style.color]="isDarkColor(tagObject?.[tagId].data.colorCode) ? '#fff' : '#000'">
+                                        {{tagObject?.[tagId].data.name}}
+                                    </span>
+                                </div>
+                                <button matChipRemove [attr.aria-label]="'remove ' + tagObject?.[tagId].data.name">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            }
+                            <input name="tagInputSection" placeholder="Search tag" #tagInput formControlName="tagName"
+                                [matChipInputFor]="tagChipGrid" [matAutocomplete]="tagAuto"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                (matChipInputTokenEnd)="addTag($event)" />
+                        </mat-chip-grid>
+                        <mat-autocomplete #tagAuto="matAutocomplete" (optionSelected)="selectedTag($event)">
+                            @for (tagObj of tagSearchList; track tagObj.data.tagId) {
+                            <mat-option [value]="tagObj.data.tagId" *ngIf="!selectedTags.includes(tagObj.data.tagId)">
+                                <div class="d-flex">
+                                    <span class="me-2" [style.background]="'#'+tagObj.data.colorCode"
+                                        style="width: 20px; border-radius: 50%;"></span>
+                                    {{tagObj.data.name}}
+                                </div>
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column gap-3 part">
+            <div class="product-child child"
+                [ngClass]="productForm.touched ? productForm.getError('atLeastOneRequired') ? 'invalid-form' : 'valid-form' : ''">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="bold-text">Product details.</div>
+                    <div class="link-text smaller-text text-end" (click)="addProduct()" tabindex="0">Add new product!
+                    </div>
+                </div>
+                <div *ngIf="productList.length === 0">No Product found !!!</div>
+                <form [formGroup]="productForm" class="product-list d-flex flex-column gap-2"
+                    *ngIf="productList.length > 0">
+                    <mat-divider />
+                    @for (product of productList; track product?.data?.productId) {
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="noWrap bold-text me-2">{{product.data.name}}</div>
+                        <div class="d-flex gap-2">
+                            <input class="product-input" [value]="product.data.rate === 0 ? '' : product.data.rate"
+                                type="number" placeholder="Rate" onKeyPress="if(this.value.length==4) return false;"
+                                [formControlName]="'rate-'+product.data.productId">
+                            <input class="product-input" type="number" placeholder="Sent"
+                                onKeyPress="if(this.value.length==4) return false;"
+                                [formControlName]="'sent-'+product.data.productId">
+                            <input class="product-input" type="number" placeholder="Received"
+                                onKeyPress="if(this.value.length==4) return false;"
+                                [formControlName]="'received-'+product.data.productId">
+                            <input class="product-input" type="number" placeholder="Payment"
+                                onKeyPress="if(this.value.length==6) return false;"
+                                [formControlName]="'payment-'+product.data.productId">
+                        </div>
+                    </div>
+                    }
+                </form>
+            </div>
+            <div class="delivery-child child"
+                [ngClass]="(deliveryPersonForm.touched || deliveryForm.touched) ? deliveryForm.getError('atLeastOneRequired') || deliveryBoySelectedList.length === 0 ? 'invalid-form' : 'valid-form' : ''">
+                <div class="bold-text">Delivery person details.</div>
+                <div *ngIf="deliveryBoysSearchList.length === 0 && deliveryBoySelectedList.length === 0" class="mt-2">No
+                    Delivery Person found !!!</div>
+                <mat-divider class="mt-2" *ngIf="deliveryBoySelectedList.length > 0" />
+                <form [formGroup]="deliveryForm" class="mt-2 d-flex flex-column gap-2"
+                    *ngIf="deliveryBoySelectedList.length > 0">
+                    <div class="d-flex justify-content-between"
+                        [ngClass]="i > 0 ? 'align-items-center':'align-items-end'"
+                        *ngFor="let deliveryPerson of deliveryBoySelectedList; let i = index">
+                        <div class="noWrap bold-text me-2 d-flex align-items-center" [ngClass]="{'mb-1': i === 0}">
+                            <span>{{deliveryPerson.data.fullName}}</span>
+                            <img src="assets/images/icons/close.png" alt="X" height="10px" width="10px"
+                                class="ms-2 cursor-pointer" (click)="removeDeliveryPersonFromList(deliveryPerson)"
+                                tabindex="0">
+                        </div>
+                        <div class="d-flex gap-2 product-list">
+                            @for (product of productList; track product?.data?.productId) {
+                            <div class="flex-1 align-items-center d-flex flex-column">
+                                <div class="bold-text mb-1 product-row noWrap text-center" *ngIf="i === 0">
+                                    {{product.data.name}}</div>
+                                <div class="d-flex gap-2 justify-content-between">
+                                    <input class="product-input-2" type="number" placeholder="Sent"
+                                        onKeyPress="if(this.value.length==4) return false;"
+                                        [formControlName]="'s-' + deliveryPerson.data.userId + '-' + product.data.productId">
+                                    <input class="product-input-2" type="number" placeholder="Received"
+                                        onKeyPress="if(this.value.length==4) return false;"
+                                        [formControlName]="'r-' + deliveryPerson.data.userId + '-' + product.data.productId">
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </form>
+
+                <form [formGroup]="deliveryPersonForm" class="delivery-form mt-2"
+                    *ngIf="deliveryBoysSearchList.length > 0">
+                    <mat-form-field class="w-100">
+                        <mat-label>Delivery Person Name</mat-label>
+                        <input matInput placeholder="Search name or number" [maxLength]="30" autocomplete="off"
+                            formControlName="deliveryBoyName" [matAutocomplete]="dBoyAutu">
+                        <mat-autocomplete #dBoyAutu="matAutocomplete">
+                            @for (option of deliveryBoyFilters | async; track option.data.userId) {
+                            <mat-option [value]="option.data.fullName"
+                                (onSelectionChange)="onSelectDeliveryBoy(option)">{{option.data.fullName}} -
+                                {{option.data.phoneNumber}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

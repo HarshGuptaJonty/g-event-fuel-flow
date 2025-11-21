@@ -1,0 +1,47 @@
+@mixin generate-style($number) {
+
+  // styles based on $number
+  .height-#{$number} {
+    height: #{$number}px !important;
+  }
+
+  .height-#{$number}p {
+    height: #{$number+'%'} !important;
+  }
+
+  .width-#{$number} {
+    width: #{$number}px !important;
+  }
+
+  .width-#{$number}p {
+    width: #{$number+'%'} !important;
+  }
+}
+
+@for $i from 0 to 101 {
+  @include generate-style($i);
+}
+
+@mixin generate-style-2($number) {
+  .min-height-#{$number} {
+    min-height: #{$number}px !important;
+  }
+
+  .max-height-#{$number} {
+    max-height: #{$number}px !important;
+  }
+
+  .min-width-#{$number} {
+    min-width: #{$number}px !important;
+  }
+
+  .max-width-#{$number} {
+    max-width: #{$number}px !important;
+  }
+}
+
+@for $i from 0 to 801 {
+  @if($i % 10==0) {
+    @include generate-style-2($i);
+  }
+}

@@ -1,0 +1,68 @@
+@import '../../../../styles/mediaQueries.scss';
+@import '../../../../assets/styles/color.scss';
+
+.delivery-attendance-container {
+    user-select: none;
+    padding: 30px 40px 40px 40px;
+    font-family: "Comfortaa", serif;
+
+    .heading {
+        font-size: 28px;
+    }
+
+    .select-list {
+        width: fit-content !important;
+    }
+
+    .name-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: $primary-mat-color;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+    .custom-table {
+        .custom-header-row {
+            background-color: $border-light;
+        }
+
+        .custom-bg-color {
+            background-color: $border-very-light;
+        }
+
+        .custom-header-cell,
+        .custom-mat-cell {
+            font-family: "Comfortaa", serif;
+        }
+
+        .no-border-bottom {
+            border-bottom: none;
+        }
+    }
+
+    .line2 {
+        color: $secondary-color;
+        font-size: 14px;
+
+        .refresh:hover {
+            color: $primary-mat-color;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    // ::ng-deep {
+    //     .mdc-switch__track::after {
+    //         background-color: $primary-web-green;
+    //     }
+
+    //     .mdc-switch:enabled:focus:not(:active) .mdc-switch__track::after {
+    //         background-color: $primary-web-green;
+    //     }
+    // }
+}
