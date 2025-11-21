@@ -36,6 +36,7 @@ graph LR
     C -->|Function Call| B
     B -->|Search & Write| D[(Firebase Realtime DB)]
     D -->|Realtime Update| A
+```
 
 
 Tech Stack
