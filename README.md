@@ -1,7 +1,7 @@
-FuelFlow AI: Agentic Logistics Manager 🚀
+**FuelFlow AI: Agentic Logistics Manager 🚀**
 
-Winner/Participant at Build and Blog Marathon 2025
-Accelerating Wholesale Logistics with Agentic AI.
+- Winner/Participant at Build and Blog Marathon 2025
+- Accelerating Wholesale Logistics with Agentic AI.
 
 ![Asking Agent to mkake new entry!](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%202.png)
 ![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%203.png)
@@ -10,19 +10,17 @@ Accelerating Wholesale Logistics with Agentic AI.
 
 For local LPG wholesalers, managing inventory, sales, and empty tank returns is a logistical nightmare.
 
-Tedious Data Entry: Staff spend hours filling out complex forms for every single sale or return.
-
-Inventory Leaks: Tracking how many empty cylinders are pending return from specific customers is difficult manually.
-
-Time Critical: In a fast-paced distribution center, stopping to navigate 5 different screens to log one transaction slows down operations.
+- **Tedious Data Entry**: Staff spend hours filling out complex forms for every single sale or return.
+- **Inventory Leaks**: Tracking how many empty cylinders are pending return from specific customers is difficult manually.
+- **Time Critical**: In a fast-paced distribution center, stopping to navigate 5 different screens to log one transaction slows down operations.
 
 ## 🤖 The Solution
 
-FuelFlow AI is an Intelligent Command Center integrated directly into the FuelFlow ERP. It replaces navigating multiple complex forms with simple natural language prompts.
+**FuelFlow AI** is an **Intelligent Command Center** integrated directly into the FuelFlow ERP. It replaces navigating multiple complex forms with simple natural language prompts.
 
 Instead of manually selecting a customer, adding items, checking stock, and assigning a delivery person, a manager can simply type (or say):
 
-"Logged 50 commercial cylinders sold to Hotel Paradise delivered by Suresh."
+    *"Logged 50 commercial cylinders sold to Hotel Paradise delivered by Suresh."*
 
 The AI understands the business logic, calculates the totals, updates the inventory, and logs the pending returns automatically—reducing a 2-minute task to 5 seconds.
 
@@ -51,7 +49,7 @@ graph LR
 
 ## ✨ Key Features
 
-1. ⚡ Rapid Data Entry via Natural Language
+1. ⚡ **Rapid Data Entry via Natural Language**
 
 Replaces multi-step form wizards with a single prompt. The AI handles the complexity of distinguishing between:
 
@@ -61,7 +59,7 @@ Replaces multi-step form wizards with a single prompt. The AI handles the comple
 
 - Mixed Transactions: "Delivered 10 filled, collected 10 empty."
 
-2. 🔍 Intelligent Context Search
+2. 🔍 **Intelligent Context Search**
 
 The AI doesn't just process text; it understands your business entities.
 
@@ -71,7 +69,7 @@ The AI doesn't just process text; it understands your business entities.
 
 - Product Resolution: It maps "14KG" to the correct inventory SKU.
 
-3. 📊 Business Intelligence & Tracking
+3. 📊 **Business Intelligence & Tracking**
 
 By standardizing data entry through AI, FuelFlow maintains accurate records for:
 
@@ -107,29 +105,29 @@ Prerequisites
 1. Frontend (Angular)
 
 ```
-    cd fuel-flow-web
-    npm install
-    ng serve
-    # Open http://localhost:4200
+cd fuel-flow-web
+npm install
+ng serve
+# Open http://localhost:4200
 ```
 
 2. Backend Agent (Cloud Run / Local)
 
 ```
-    cd backend-agent
-    pip install -r requirements.txt
+cd backend-agent
+pip install -r requirements.txt
 
-    # Run locally
-    python -m uvicorn main:app --host 0.0.0.0 --port 8080
+# Run locally
+python -m uvicorn main:app --host 0.0.0.0 --port 8080
 ```
 
 
 3. Deployment
 
 ```
-    # Build & Deploy to Cloud Run
-    gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
-    gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
+# Build & Deploy to Cloud Run
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
+gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
 ```
 
 
@@ -148,10 +146,10 @@ Nested JSON created instantly
 
 ## 🏆 Impact
 
-- 90% Reduction in time spent on data entry tasks.
+- **90% Reduction in time** spent on data entry tasks.
 
-- Minimized Human Error: No more clicking the wrong dropdown or selecting the wrong product ID.
+- **Minimized Human Error**: No more clicking the wrong dropdown or selecting the wrong product ID.
 
-- Real-time Asset Tracking: Immediate visibility into where every cylinder is located.
+- **Real-time Asset Tracking**: Immediate visibility into where every cylinder is located.
 
-- Built with ❤️ at the Google Cloud Build & Blog Marathon, Hyderabad.
+- **Built with ❤️ at the Google Cloud Build & Blog Marathon, Hyderabad.**
