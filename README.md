@@ -134,8 +134,8 @@ gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent -
 4. **Authentication**
 
 ```
-Number: 6291444925
-OTP: 768954
+Number: 92345 67890
+OTP: 124578
 ```
 
 
