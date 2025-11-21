@@ -25,10 +25,11 @@ Instead of manually selecting a customer, adding items, checking stock, and assi
 
 The AI understands the business logic, calculates the totals, updates the inventory, and logs the pending returns automatically—reducing a 2-minute task to 5 seconds.
 
-🏗️ Architecture
+## 🏗️ Architecture
 
-The system uses a Hybrid Architecture combining a reactive Angular frontend with a scalable Serverless Python "Brain".
+The system uses a **Hybrid Architecture** combining a reactive Angular frontend with a scalable Serverless Python "Brain".
 
+```mermaid
 graph LR
     A[User Prompt] -->|Angular Frontend| B(Cloud Run Agent)
     B -->|Context & Tools| C{Gemini 2.5 Flash}
