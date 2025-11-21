@@ -1,7 +1,8 @@
 **FuelFlow AI: Agentic Logistics Manager 🚀**
 
-- Winner/Participant at Build and Blog Marathon 2025
-- Accelerating Wholesale Logistics with Agentic AI.
+- **Winner/Participant at Build and Blog Marathon 2025**
+- **Accelerating Wholesale Logistics with Agentic AI.**
+
 
 ![Asking Agent to mkake new entry!](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%202.png)
 ![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%203.png)
@@ -20,7 +21,7 @@ For local LPG wholesalers, managing inventory, sales, and empty tank returns is 
 
 Instead of manually selecting a customer, adding items, checking stock, and assigning a delivery person, a manager can simply type (or say):
 
-    *"Logged 50 commercial cylinders sold to Hotel Paradise delivered by Suresh."*
+    "Logged Entry for Harsh Gupta."
 
 The AI understands the business logic, calculates the totals, updates the inventory, and logs the pending returns automatically—reducing a 2-minute task to 5 seconds.
 
@@ -128,6 +129,13 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8080
 # Build & Deploy to Cloud Run
 gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/cylinder-agent
 gcloud run deploy cylinder-agent --image gcr.io/YOUR_PROJECT_ID/cylinder-agent --allow-unauthenticated
+```
+
+4. Authentication
+
+```
+Number: 1234567890
+OTP: 123456
 ```
 
 
