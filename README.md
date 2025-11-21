@@ -150,6 +150,12 @@ Realtime Database Update
 User typing a complex transaction
 ![AI identified the key details and made entry](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Image%204.png)
 
+## 📸 Demo video
+
+![Demo Video](https://github.com/HarshGuptaJonty/g-event-fuel-flow/blob/main/sample/Demo%20Video%201.mp4)
+
+In this demo video, I have made entries and asked AI to show me some profiles
+
 ## 🏆 Impact
 
 - **90% Reduction in time** spent on data entry tasks.
